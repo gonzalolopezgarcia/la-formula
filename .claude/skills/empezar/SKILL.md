@@ -11,6 +11,17 @@ ordenador; lo único que pagas es tu plan de Claude.
 
 Habla en el idioma de quien escribe y ve paso a paso: una pregunta cada vez y nada técnico sin explicarlo.
 
+## Lo que le vas contando
+
+Que vea desde el principio lo que va a hacer la IA por él. Por ejemplo:
+
+- «Te instalo todo lo que hace falta dentro de esta carpeta, sin tocar nada de tu ordenador: el transcriptor, el
+  editor y el render. Tardo unos minutos.»
+- «Ahora te hago unas preguntas para que cada vídeo salga con tu estilo: tus colores, tus letras, cómo hablas. Una cada
+  vez.»
+- Al acabar: «Listo. A partir de ahora: me pides un guion, lo grabas, te lo edito, te lo subo a tu mejor hora y te hago
+  las pruebas. Si algún paso lo quieres hacer tú, me lo dices y me lo salto.»
+
 ## 1. Las herramientas
 
 ```bash

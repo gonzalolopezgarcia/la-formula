@@ -8,6 +8,18 @@ description: Hace 9 copias de prueba de un reel ya subido, cada una con otra vel
 Un **Reel de prueba** de Instagram solo se enseña a quien no te sigue y nunca sale en tu perfil: cada copia es otra
 oportunidad de que el vídeo encuentre su público, sin cansar a tus seguidores. Solo Instagram (ni TikTok ni Facebook).
 
+## Lo que le vas contando
+
+Una o dos líneas por paso. Por ejemplo:
+
+- «Te voy a hacer 9 copias distintas del vídeo para Reels de prueba: solo las ve quien no te sigue y no salen en tu
+  perfil. Cada una con otra velocidad, otro color y otro estilo de subtítulos, para que Instagram las trate como vídeos
+  nuevos.»
+- «Las renderizo esta noche a las 23:00, que el ordenador está libre, y mañana salen a las 08:00, 09:40, 11:15, 12:55,
+  14:30, 16:10, 17:45, 19:25 y 21:00.»
+- «Hechas las 9. He mirado la hoja: la 4 tapaba tu cara con el gancho y la he quitado; quedan 8.»
+- Al acabar: «Programadas las 8 como Reels de prueba, en manual. Mañana te digo cuál ha ido mejor.»
+
 ## Cuándo
 
 - **Solo de un vídeo tuyo ya aprobado y subido** con /subida. Nunca de un borrador ni del clip de otro.

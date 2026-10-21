@@ -13,6 +13,19 @@ Antes de escribir, lee `marca/voz.md` (cómo hablas, tus expresiones, lo que nun
 (lo que ya sabemos de tus vídeos publicados) y, en modo inspiración, `marca/referentes.md`. Los moldes al detalle:
 `moldes.md`. Escribe en el idioma de `marca/marca.json`.
 
+## Lo que le vas contando
+
+Una o dos líneas por paso, con lo que has hecho de verdad. Por ejemplo:
+
+- «Voy a mirar los últimos reels de tus 4 referentes para ver qué les está funcionando.» → «He mirado 112 reels: estos
+  3 van por encima de 5 veces su mediana. Te propongo el 2, que encaja con lo que tú puedes enseñar.»
+- «Antes de escribir, compruebo si el tema puede funcionar.» → «Tiene nombre, es gratis y se ve funcionando: tiene
+  gancho. Lo haría como un `capacidad` de 45 s.»
+- «He comprobado las 4 cifras del guion en su web oficial: todas cuadran, te dejo las fuentes.»
+- «Te dejo 3 ganchos, cada uno engancha por algo distinto: el 1 por dinero, el 2 por sorpresa y el 3 por ti. Te
+  recomiendo el 1.»
+- Al acabar: «Grábalo con tus palabras, cada toma por separado, y pásame los clips a `videos/entrada/`: te lo edito yo.»
+
 ## Primero: qué guion pide
 
 | Dice | Modo | Qué haces |

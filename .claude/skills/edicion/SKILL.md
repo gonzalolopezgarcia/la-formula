@@ -13,6 +13,21 @@ Antes de nada, lee `marca/estilo.md` (lo que te gusta y lo que no, y tus correcc
 Las piezas del kit, con ejemplos: `piezas.md`. Los estilos «partida», «clip» y «vlog» al detalle: `estilos.md`.
 Un guion de ejemplo con lo principal: `ejemplo/guion.html`.
 
+## Lo que le vas contando
+
+Una o dos líneas por paso, con los números de verdad. Por ejemplo:
+
+- «Junto tus 12 clips y los transcribo en tu ordenador, sin mandar nada fuera.» → «Listo: 2:27 de brutos.»
+- «Te he quitado los silencios, 3 tomas repetidas y 2 frases cortadas: de 2:27 a 1:18. Lo que has dicho está entero.»
+- «Leyendo lo que dices: cierras bien la idea antes del "comenta". Te propongo el estilo de gráficos encima.»
+- «He escrito 19 bloques, uno cada 3 s: tus seguidores girando de 879 a 3.787, tu gráfica, tus 4 reels con más vistas…»
+- «La canción: Cinematic Pulse, por debajo de tu voz y nivelada para que se oiga igual en el móvil.»
+- «27 efectos de sonido, uno en cada remate y ninguno al entrar un bloque, como los editores que funcionan.»
+- «He revisado los 158 fotogramas del vídeo (uno cada medio segundo) y he arreglado 4 cosas antes de enseñártelo.»
+- «Aquí tienes el borrador. Míralo con sonido y dime qué cambio.» → con su sí: «Renderizo la versión final y la
+  portada, con el fotograma donde tienes los ojos más abiertos.»
+- Al acabar: «Perfecto. Te sugiero subirlo hoy a las 19:30, media hora antes de tu pico: ¿lo programo?» (/subida)
+
 ## Primero: qué estilo
 
 Pregúntalo si no lo dice ni está en `marca/estilo.md`. Una línea por estilo:

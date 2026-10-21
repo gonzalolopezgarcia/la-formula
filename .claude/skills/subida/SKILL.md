@@ -12,6 +12,20 @@ falta ninguna API ni cuenta de desarrollador. Lee `marca/marca.json` (cuentas, h
 🚨 **Publicar es tuyo**: se deja todo rellenado y se pulsa «Programar» o «Publicar» solo con su sí a ESE vídeo, a esa
 hora. Nunca escribas su contraseña: si una web pide entrar, que entre él.
 
+## Lo que le vas contando
+
+Una o dos líneas por paso. Por ejemplo:
+
+- «He mirado tus estadísticas: tu gente se conecta sobre todo a las 20:00 entre semana. Te propongo subirlo hoy a las
+  19:30, en Instagram, TikTok y Facebook a la vez.»
+- «Como el vídeo dice "comenta FÓRMULA", te escribo lo que les llegará por privado, sacado de lo que dices en el vídeo:
+  aquí lo tienes para que lo leas.»
+- «Lo dejo listo en Meta Business Suite con tu portada buena (no la que elige Instagram, que suele salir a medio
+  parpadeo) y el pie. Dime "dale" y lo programo.»
+- «Programado en Instagram y Facebook para las 19:30. Ahora TikTok, a la misma hora, con su pie.»
+- Al acabar: «Listo en las 3 redes a las 19:30. Mañana te hago las 9 pruebas para quien no te sigue: 08:00, 09:40,
+  11:15, 12:55, 14:30, 16:10, 17:45, 19:25 y 21:00. ¿Las preparo esta noche?» (/pruebas)
+
 ## 0. Lo que se manda, a la vez que su visto bueno
 
 Si el vídeo acaba en «comenta X», el documento que recibe quien comenta se escribe aquí:
