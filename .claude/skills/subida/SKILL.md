@@ -28,23 +28,36 @@ Si el vídeo acaba en «comenta X», el documento que recibe quien comenta se es
   Instagram lo detecta como comportamiento automático y puede bloquear la cuenta.
 - Enséñale el documento y el mensaje junto con el resumen de la subida: su «súbelo» es el sí a todo.
 
-## 1. Qué vídeo y a qué hora
+## 1. Qué vídeo y a qué hora: tú propones la mejor
 
 - **El que se acaba de hacer** (`videos/salida/<nombre>.mp4`, su `.portada.png` y su `.pie.txt`) o el que diga.
 - La hora real con `date`, en su zona (`marca/marca.json`).
+- 🚨 **No le preguntes a qué hora: propónsela, con el motivo**, y que diga sí u otra. Una línea, por ejemplo: «Lo
+  programo hoy a las 19:30, media hora antes de tu pico de las 20:00, en Instagram, TikTok y Facebook a la vez; y
+  mañana las 9 pruebas de 08:00 a 21:00».
 
-| Dice | Hora |
-|---|---|
-| «por la mañana», «a mediodía» | `horas.mañana` de marca.json |
-| «por la tarde», «por la noche» o nada | `horas.tarde` |
-| una hora concreta | esa |
-| «ya», «súbelo ya» | ahora |
+**Cómo se elige la hora**, por orden:
 
-- Si la de hoy ya ha pasado, la de mañana: díselo en la respuesta, no preguntes.
-- **Nunca dos publicaciones a la vez** en la misma red: mira lo que ya tiene programado.
+1. **Si dice una**, esa. «Ya» o «súbelo ya»: ahora.
+2. **Sus horas buenas** (`horas` de marca.json): «por la mañana» o «a mediodía» → `horas.mañana`; «por la tarde», «por
+   la noche» o nada → `horas.tarde`.
+3. 🚨 **La primera vez, o si no está seguro, mira cuándo está conectada su gente** (en su Chrome, solo lectura):
+   - Instagram: panel profesional → Estadísticas → Seguidores totales → «Momentos de más actividad» (por horas y por
+     días). La hora buena es **30 minutos antes de su pico**: el vídeo ya está cuando entran, y en el pico compite con
+     todo lo demás.
+   - TikTok Studio: Estadísticas → Seguidores → «Actividad de los seguidores».
+   - Con menos de 100 seguidores los datos no salen: usa 13:00 y 19:30 (en España, un poco antes del pico del mediodía
+     y del de la noche) y se ajusta cuando haya datos.
+   - Apunta lo que veas en `marca/marca.json` (`horas`) y en `marca/subida.md`, y díselo: «Tu gente se conecta sobre todo
+     a las 20:00 entre semana: te propongo 19:30».
+4. **Se aprende con lo publicado**: cada dos semanas, sus vídeos de cada hora contra su mediana (`marca/lecciones.md`).
+   Si una hora va mal dos veces, propón moverla; se cambia con su sí.
+
+- Si la de hoy ya ha pasado, la de mañana: díselo en la propuesta, no preguntes.
+- **Nunca dos publicaciones a menos de una hora** en la misma red: mira lo que ya tiene programado (incluidas sus
+  pruebas) y, si choca, propón la siguiente hora libre.
+- Fin de semana: su gente suele conectarse más tarde; mira su gráfica de «Momentos de más actividad» de ese día.
 - TikTok solo deja programar entre 15 minutos y 10 días por delante.
-- **Las horas se aprenden**: un poco antes del pico de su audiencia (Estadísticas de Instagram → Seguidores →
-  Momentos de más actividad). Si un vídeo a una hora va mal dos veces, propón moverla; se cambia con su sí.
 
 ## 2. El pie de cada red
 
@@ -103,4 +116,5 @@ adáptalos y apúntalo en `marca/subida.md`.
 - Cierra las pestañas que abriste.
 - Contesta en dos líneas: qué vídeo, a qué hora y en qué redes; y, si pide «comenta X», que en TikTok esos
   comentarios los contesta él.
-- Si es un vídeo normal suyo (no un clip de otro), ofrécele las copias de prueba de mañana: /pruebas.
+- Si es un vídeo normal suyo (no un clip de otro), ofrécele las copias de prueba de mañana con sus horas
+  (/pruebas): «Mañana, 9 pruebas a las 08:00, 09:40, 11:15, 12:55, 14:30, 16:10, 17:45, 19:25 y 21:00».

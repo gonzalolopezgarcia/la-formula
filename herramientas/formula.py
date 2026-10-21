@@ -983,6 +983,19 @@ GANCHOS_TRIAL_CLIP = {
 }
 
 
+def horas_de_prueba(n, dia=None):
+    """n horas repartidas por igual de 08:00 a 21:00, redondeadas a 5 min (con 9: 08:00, 09:40, 11:15, 12:55,
+    14:30, 16:10, 17:45, 19:25 y 21:00). Si el día es hoy, desde dentro de 15 minutos."""
+    import datetime as dt
+    from zoneinfo import ZoneInfo
+    ahora = dt.datetime.now(ZoneInfo(config.marca()["zona_horaria"]))
+    dia = dia or (ahora + dt.timedelta(days=1)).strftime("%Y-%m-%d")
+    desde = max(480, -(-(ahora.hour * 60 + ahora.minute + 15) // 5) * 5) if dia == ahora.strftime("%Y-%m-%d") else 480
+    tramo = 1260 - desde
+    minutos = [desde + (int(i * tramo / (n - 1) / 5 + 0.5) * 5 if n > 1 else 0) for i in range(n)]
+    return dia, [f"{m // 60:02d}:{m % 60:02d}" for m in minutos]
+
+
 def pruebas(args):
     """Las copias de prueba de un reel ya terminado y aprobado (ver .claude/skills/pruebas/SKILL.md)."""
     dir_ = carpeta(args.nombre)
@@ -1046,7 +1059,13 @@ def pruebas(args):
     filas += "".join(f"[v{j}]" for j in range(n, 2 * n)) + (f"hstack=inputs={n}[b];" if n > 1 else "null[b];")
     subprocess.run([FFMPEG, "-v", "error", "-y", *entradas, "-filter_complex", escala + filas + "[a][b]vstack",
                     "-frames:v", "1", "-q:v", "3", str(hoja)], check=True)
-    print(f"\n  {n} copias en {destino}\n  hoja: {hoja}")
+    dia, horas = horas_de_prueba(args.desde + args.n, args.dia)
+    horario = destino / f"{args.nombre}-pruebas-horario.txt"
+    lineas = [f"{args.nombre}-prueba-{i}.mp4  {dia} {horas[i]}" for i in range(args.desde, args.desde + args.n)]
+    horario.write_text("\n".join(lineas) + "\n", encoding="utf-8")
+    print(f"\n  {n} copias en {destino}\n  hoja: {hoja}\n\nCuándo sale cada una (Reel de prueba, en manual):")
+    print("\n".join("  " + l for l in lineas))
+    print(f"  → {horario}")
 
 
 def abrir(video):
@@ -1140,6 +1159,7 @@ def main():
     p.add_argument("--hashtags", required=True, help="de 5 a 10, del tema: cada copia lleva 5, en otro orden")
     p.add_argument("--n", type=int, default=9, help="cuántas copias (9)")
     p.add_argument("--desde", type=int, default=0, help="la primera combinación: para seguir una tanda cortada")
+    p.add_argument("--dia", help="el día en que salen, AAAA-MM-DD (por defecto, mañana)")
     p.set_defaults(f=pruebas)
     for nombre, f in (("armar", armar), ("render", render), ("foto", foto), ("portada", portada)):
         p = sub.add_parser(nombre)

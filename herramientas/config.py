@@ -20,7 +20,7 @@ POR_DEFECTO = {
     "cuentas": {"instagram": "", "tiktok": "", "facebook": ""},
     "colores": {"acento": "#FFD400", "panel": "#111111", "papel": "#F4F1EA", "tinta": "#111111"},
     "letras": {"texto": "Inter", "grande": "Bebas Neue", "mono": "JetBrains Mono", "titulo": "Instrument Serif"},
-    "horas": {"mañana": "13:00", "tarde": "19:00"},
+    "horas": {"mañana": "13:00", "tarde": "19:30"},
     "pie_otras_redes": "",
     "palabras_prohibidas": [],
 }

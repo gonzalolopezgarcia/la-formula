@@ -11,39 +11,43 @@ oportunidad de que el vídeo encuentre su público, sin cansar a tus seguidores.
 ## Cuándo
 
 - **Solo de un vídeo tuyo ya aprobado y subido** con /subida. Nunca de un borrador ni del clip de otro.
-- **Salen al día siguiente** del original, repartidas de 08:00 a 21:00.
-- **Se renderizan cuando digas**: ya, o «esta noche» si el ordenador está ocupado. Cada copia rehace el vídeo entero:
-  unos 3 minutos por cada 45 s con el ordenador libre.
+- **Salen al día siguiente** del original: 9 repartidas por igual de 08:00 a 21:00, redondeadas a 5 minutos.
+- 🚨 **Díselo antes de hacer nada**, con las horas: «Mañana, 9 pruebas a las 08:00, 09:40, 11:15, 12:55, 14:30, 16:10,
+  17:45, 19:25 y 21:00. Las hago esta noche a las 23:00, que el ordenador está libre, y las dejo programadas».
+- Si una cae a menos de 15 minutos de otra publicación suya de ese día, se mueve 15 minutos y se lo dices.
+- Si mañana ya hay pruebas de otro vídeo, las de este se intercalan entre las otras.
+- **Se renderizan cuando diga**: ya, o «esta noche» si el ordenador está ocupado (por defecto, a las 23:00). Cada copia
+  rehace el vídeo entero: unos 3 minutos por cada 45 s con el ordenador libre.
 
 ## Hacerlas
 
 ```bash
-herramientas/formula pruebas <nombre> --hashtags "#tema1 #tema2 #tema3 #tema4 #tema5"
+herramientas/formula pruebas <nombre> --hashtags "#tema1 #tema2 #tema3 #tema4 #tema5"   # --dia AAAA-MM-DD si no es mañana
 ```
 
 - Cada copia cambia: la velocidad (1,03× a 1,10×, la voz sin cambiar de tono), el color, el estilo de los subtítulos
   (contorno, caja negra, amarillo, caja blanca, mayúsculas) y del gancho, y lo baja 0, 28 o 56 px (nunca más arriba:
   arriba tapa Instagram). Fichero nuevo, sin los datos del original. En un mismo vídeo no se repite combinación.
 - **Hashtags**: de 5 a 10 del tema del vídeo, nunca los de alcance (#viral, #fyp). Cada copia lleva 5, en otro orden,
-  debajo de su pie.
-- Deja en `videos/salida/pruebas/` cada `<nombre>-prueba-N.mp4` con su portada y su pie, y la hoja
-  `<nombre>-pruebas.jpg` (el gancho y un subtítulo de cada una).
+  debajo de su pie. El pie empieza igual que el del original: así la respuesta automática del «comenta X» también
+  contesta en las pruebas (compruébalo en la herramienta que use).
+- Deja en `videos/salida/pruebas/` cada `<nombre>-prueba-N.mp4` con su portada y su pie, la hoja `<nombre>-pruebas.jpg`
+  (el gancho y un subtítulo de cada una) y **`<nombre>-pruebas-horario.txt`, la hora de cada una**.
 - Si se corta, sigue por donde iba: `--desde N --n <las que faltan>`.
-- **Para dejarlas haciéndose solas** (y que sigan aunque cierres Claude):
-  `screen -dmS pruebas caffeinate -i herramientas/formula pruebas <nombre> --hashtags "…"` (en Mac; en Linux sin
-  `caffeinate`).
+- **Para dejarlas haciéndose solas esta noche** (y que sigan aunque cierres Claude), en Mac:
+  `screen -dmS pruebas zsh -c 'sleep $(( $(date -j -f "%H:%M" 23:00 +%s) - $(date +%s) )); caffeinate -i herramientas/formula pruebas <nombre> --hashtags "…"'`
 
 🚨 **Mira la hoja antes de subirlas**: texto cortado o encima de la cara, esa copia fuera.
 
-## Subirlas
+## Programarlas
 
-Con /subida, una a una y repartidas de 08:00 a 21:00 del día siguiente, marcando **«Reel de prueba»**:
+Con /subida, **cada una a su hora del horario**, marcando **«Reel de prueba»**:
 
-- En Meta Business Suite, al crear el reel, si sale la opción «Reel de prueba», actívala.
-- Si no sale, desde la app de Instagram: al compartir el reel, «Reel de prueba».
-- 🚨 **Siempre en manual**: que no se comparta solo con tus seguidores si funciona. Es la copia de un reel que ya está
-  en tu perfil: lo verían dos veces.
-- Apunta en `marca/subida.md` cómo se llama la opción la primera vez.
+- En Meta Business Suite, al crear el reel, si sale la opción «Reel de prueba», actívala; si no, desde la app de
+  Instagram al compartir el reel.
+- 🚨 **Siempre en manual**: que no se comparta sola con tus seguidores si funciona. Es la copia de un reel que ya está en
+  tu perfil: lo verían dos veces.
+- Al acabar, dile cuáles quedaron programadas y a qué hora, y apunta en `marca/subida.md` cómo se llama la opción.
 
 ## La primera semana
 

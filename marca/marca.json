@@ -18,7 +18,7 @@
     "mono": "JetBrains Mono",
     "titulo": "Instrument Serif"
   },
-  "horas": { "_ayuda": "A qué hora sale cada vídeo si no dices otra. Ajústalas con tus estadísticas (/subida)", "mañana": "13:00", "tarde": "19:00" },
+  "horas": { "_ayuda": "A qué hora sale cada vídeo si no dices otra. Ajústalas con tus estadísticas (/subida)", "mañana": "13:00", "tarde": "19:30" },
   "pie_otras_redes": "",
   "palabras_prohibidas": []
 }

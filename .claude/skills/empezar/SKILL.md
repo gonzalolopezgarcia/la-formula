@@ -38,7 +38,7 @@ Una pregunta cada vez, con un ejemplo de respuesta, y lo que conteste va a su fi
 | En qué idioma hace los vídeos y su zona horaria | `idioma`, `zona_horaria` |
 | Su color de acento (el de la palabra clave y la cifra que importa) y el de las tarjetas. Si no sabe, ofrécele tres combinaciones con contraste y que elija | `colores.acento`, `colores.panel` |
 | Sus letras, de las instaladas (Inter, Montserrat, Poppins para el texto; Bebas Neue o Anton para lo grande) | `letras` |
-| A qué horas sube (si no lo sabe: 13:00 y 19:00, y se ajustan con sus estadísticas) | `horas` |
+| A qué horas sube. Si no lo sabe, míralo con él en Estadísticas → «Momentos de más actividad» y propón 30 min antes de su pico; sin datos, 13:00 y 19:30 | `horas` |
 | Qué pie lleva en TikTok y Facebook (por ejemplo «IG: sucuenta»), o el mismo | `pie_otras_redes` |
 | Cómo habla, sus expresiones, lo que nunca diría y a quién le habla | `marca/voz.md` |
 | Palabras que no quiere en sus guiones | `palabras_prohibidas` |
