@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Canción del reel</title>
+<style>
+  :root { --fondo: #0E0E10; --tarjeta: #18181B; --linea: #2A2A2F; --texto: #F4F4F5; --suave: #A1A1AA; --acento: #FFD400; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--fondo); color: var(--texto); font-family: -apple-system, "Inter", system-ui, sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 40px 16px 80px; }
+  h1 { margin: 0 0 6px; font-size: 30px; letter-spacing: -.02em; }
+  .bajada { margin: 0 0 28px; color: var(--suave); font-size: 15px; }
+  .op { display: grid; grid-template-columns: 56px 1fr; gap: 4px 18px; padding: 20px; margin-bottom: 14px;
+        background: var(--tarjeta); border: 1px solid var(--linea); border-radius: 18px; }
+  .op.elegida { border-color: var(--acento); }
+  .num { grid-row: span 3; font-size: 40px; font-weight: 800; color: var(--acento); line-height: 1; }
+  .titulo { font-size: 20px; font-weight: 700; }
+  .titulo span { color: var(--suave); font-weight: 500; }
+  .etiquetas { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 2px; }
+  .etq { font-size: 12px; font-weight: 600; padding: 4px 9px; border-radius: 999px; background: #26262B; color: var(--suave); }
+  .etq.suya { background: rgba(255, 212, 0, .14); color: #FFD400; }
+  .como { color: var(--suave); font-size: 14px; margin: 2px 0 10px; }
+  .reproductores { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .reproductores label { display: block; font-size: 12px; color: var(--suave); margin-bottom: 4px; }
+  audio { width: 100%; height: 36px; }
+  button { margin-top: 12px; padding: 10px 16px; border: 0; border-radius: 10px; background: #fff; color: #111;
+           font-weight: 700; font-size: 14px; cursor: pointer; justify-self: start; }
+  .op.elegida button { background: var(--acento); color: #111; }
+  .aviso { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); padding: 12px 18px; border-radius: 12px;
+           background: #fff; color: #111; font-weight: 600; font-size: 14px; opacity: 0; transition: opacity .2s; }
+  .aviso.ver { opacity: 1; }
+  @media (max-width: 560px) { .reproductores { grid-template-columns: 1fr; } .op { grid-template-columns: 40px 1fr; } .num { font-size: 30px; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Canción del reel</h1>
+  <p class="bajada">«En tu reel» es el principio del vídeo con la canción al volumen de verdad. «Sola» es la canción sola. Todas suenan igual de altas por el altavoz de un móvil: escúchalas ahí.</p>
+  <div id="lista"></div>
+</main>
+<div class="aviso" id="aviso"></div>
+<script>
+const opciones = /*OPCIONES*/[];
+const lista = document.getElementById("lista");
+opciones.forEach((o, i) => {
+  const n = i + 1;
+  const el = document.createElement("section");
+  el.className = "op";
+  el.innerHTML = `
+    <div class="num">${n}</div>
+    <div class="titulo">${o.titulo} <span>· ${o.artista}</span></div>
+    <div class="etiquetas">${o.etq.map(e => `<span class="etq${false ? " suya" : ""}">${e}</span>`).join("")}</div>
+    <div>
+      ${o.como ? `<p class="como">${o.como}</p>` : ""}
+      <div class="reproductores">
+        <div><label>En tu reel</label><audio controls preload="none" src="${o.id}.m4a"></audio></div>
+        <div><label>Sola</label><audio controls preload="none" src="${o.id}.sola.m4a"></audio></div>
+      </div>
+      <button type="button">Elegir esta</button>
+    </div>`;
+  el.querySelector("button").addEventListener("click", () => elegir(el, `Me quedo con la ${n}: ${o.titulo}, ${o.artista}`));
+  lista.appendChild(el);
+});
+// Solo suena una a la vez
+document.addEventListener("play", e => document.querySelectorAll("audio").forEach(a => { if (a !== e.target) a.pause(); }), true);
+function elegir(el, texto) {
+  document.querySelectorAll(".op").forEach(x => x.classList.remove("elegida"));
+  el.classList.add("elegida");
+  const hecho = () => avisar(`Copiado: «${texto}». pégaselo a Claude`);
+  const viejo = () => { const t = document.createElement("textarea"); t.value = texto; document.body.appendChild(t); t.select();
+    try { document.execCommand("copy"); hecho(); } catch (_) { avisar(texto); } t.remove(); };
+  if (navigator.clipboard) navigator.clipboard.writeText(texto).then(hecho, viejo); else viejo();
+}
+function avisar(t) { const a = document.getElementById("aviso"); a.textContent = t; a.classList.add("ver"); setTimeout(() => a.classList.remove("ver"), 3500); }
+</script>
+</body>
+</html>

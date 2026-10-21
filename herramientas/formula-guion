@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Lanza herramientas/guion.py con el Python de herramientas/.venv (lo crea instalar.sh)
+aqui="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+[ -x "$aqui/.venv/bin/python" ] || { echo "Primero: herramientas/instalar.sh"; exit 1; }
+export PATH="$aqui/.bin:$aqui/.venv/bin:$PATH"
+exec "$aqui/.venv/bin/python" "$aqui/guion.py" "$@"

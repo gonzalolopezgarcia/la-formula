@@ -1,0 +1,12 @@
+# Tus vídeos y lo que se genera al editar: nunca al repo
+videos/
+# Lo que pone herramientas/instalar.sh
+herramientas/.venv/
+herramientas/.hf/
+herramientas/.bin/
+herramientas/kit/fonts/
+herramientas/kit/gsap.min.js
+__pycache__/
+# Tu música (los ficheros; la ficha marca/musica.json sí puede ir)
+marca/musica/
+.DS_Store

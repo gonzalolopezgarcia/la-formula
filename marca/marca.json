@@ -1,0 +1,24 @@
+{
+  "_ayuda": "Tu marca. La leen las herramientas y las skills. /empezar te la rellena con una entrevista; cambia lo que quieras a mano.",
+  "nombre": "",
+  "idioma": "es",
+  "zona_horaria": "Europe/Madrid",
+  "cuentas": { "instagram": "", "tiktok": "", "facebook": "" },
+  "colores": {
+    "_ayuda": "acento: la palabra clave, la cifra que importa, lo que se marca. panel: el cristal de las tarjetas. papel y tinta: el panel claro del estilo «partida»",
+    "acento": "#FFD400",
+    "panel": "#111111",
+    "papel": "#F4F1EA",
+    "tinta": "#111111"
+  },
+  "letras": {
+    "_ayuda": "Instaladas: Inter, Montserrat, Poppins, Bebas Neue, Anton, JetBrains Mono, Instrument Serif",
+    "texto": "Inter",
+    "grande": "Bebas Neue",
+    "mono": "JetBrains Mono",
+    "titulo": "Instrument Serif"
+  },
+  "horas": { "_ayuda": "A qué hora sale cada vídeo si no dices otra. Ajústalas con tus estadísticas (/subida)", "mañana": "13:00", "tarde": "19:00" },
+  "pie_otras_redes": "",
+  "palabras_prohibidas": []
+}

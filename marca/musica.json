@@ -1,0 +1,14 @@
+{
+ "_ayuda": "Tus canciones. Añade con: herramientas/formula musica --anadir <fichero o enlace> --tipos caso,utilidad --titulo \"…\" --artista \"…\" --desde <segundo>. Los audios van a marca/musica/ (no se suben al repo). Solo música que puedas usar.",
+ "tipos": {
+  "historia": "Tu historia o una decisión. Piano y cine, lento",
+  "utilidad": "Tutoriales: una herramienta, una lista, un regalo, una comparación. Ligera y con ritmo, sin letra que tape la voz",
+  "noticia": "Lo nuevo de algo. Tensión y misterio: sintes oscuros, cuerdas, algo que empuja",
+  "modelo": "Un lanzamiento que lo cambia todo. Épica que crece",
+  "reaccion": "El clip de otro y tu opinión. Debate y tensión",
+  "caso": "Lo que has conseguido o montado. Con chulería",
+  "vlog": "Un día de tu vida: un groove casi a la par de tu voz",
+  "reflexion": "Sin voz: frases sobre la música, que lo lleva todo"
+ },
+ "canciones": []
+}

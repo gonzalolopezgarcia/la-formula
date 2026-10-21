@@ -1,0 +1,20 @@
+{
+  "name": "la-formula-herramientas",
+  "private": true,
+  "description": "Lo que usa La Fórmula para renderizar: HyperFrames, GSAP, iconos y letras",
+  "dependencies": {
+    "hyperframes": "0.8.150",
+    "gsap": "3.14.2",
+    "puppeteer-core": "^25.10.0",
+    "@ffprobe-installer/ffprobe": "^2.1.2",
+    "simple-icons": "^16.35.0",
+    "lucide-static": "^1.55.0",
+    "@fontsource-variable/inter": "^5.3.0",
+    "@fontsource-variable/jetbrains-mono": "^5.3.0",
+    "@fontsource-variable/montserrat": "^5.2.0",
+    "@fontsource/bebas-neue": "^5.2.0",
+    "@fontsource/anton": "^5.2.0",
+    "@fontsource/poppins": "^5.2.0",
+    "@fontsource/instrument-serif": "^5.2.0"
+  }
+}

@@ -1,0 +1,21 @@
+/* Estilo «clip». Va después de base.css. Ver estilos.md. */
+#clip { position: absolute; left: 0; top: var(--clip-y); width: 100%; height: calc(var(--costura) - var(--clip-y));
+  object-fit: cover; }
+#reaccion, #base { object-position: 50% var(--encuadre); }
+#reaccion { position: absolute; left: 0; top: var(--costura); width: 100%; height: calc(1920px - var(--costura));
+  object-fit: cover; border-radius: 30px 30px 0 0; }
+.gancho { top: 262px; left: 60px; right: 60px; font-family: var(--letra), system-ui, sans-serif; font-weight: 800; font-size: 60px;
+  line-height: 1.1; letter-spacing: -.03em; text-transform: none; -webkit-text-stroke: 0; text-shadow: none; }
+.acento { color: var(--acento); }
+.beat.quien { top: calc(var(--clip-y) + 24px); left: 32px; right: auto; }
+.quien .ficha { display: inline-flex; align-items: center; gap: 16px; padding: 10px 24px 10px 10px; border-radius: 20px;
+  background: #fff; color: #111; box-shadow: 0 10px 30px rgba(0, 0, 0, .35); }
+.quien .ficha .icono { width: 64px; height: 64px; border-radius: 14px; box-shadow: none; background: #F2F2F2; }
+.quien .ficha b { display: block; font-size: 34px; font-weight: 800; letter-spacing: -.02em; line-height: 1.05; }
+.quien .ficha .mono { font-size: 20px; text-shadow: none; color: rgba(17, 17, 17, .6); }
+.traduccion { position: absolute; left: 50px; right: 50px; bottom: calc(1920px - var(--costura) + 30px); margin: 0;
+  text-align: center; font-family: var(--letra), system-ui, sans-serif; font-size: 48px; font-weight: 700; line-height: 1.15;
+  letter-spacing: -.01em; color: #fff; text-wrap: balance;
+  -webkit-text-stroke: 6px #000; paint-order: stroke fill; text-shadow: 0 3px 10px rgba(0, 0, 0, .5); }
+.sub { font-family: var(--letra), system-ui, sans-serif; font-weight: 650; font-size: 44px; letter-spacing: -.01em; line-height: 1.15;
+  -webkit-text-stroke: 4px #000; paint-order: stroke fill; text-shadow: 0 2px 6px rgba(0, 0, 0, .55); }

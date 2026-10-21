@@ -1,0 +1,6 @@
+faster-whisper>=1.2,<1.3
+imageio-ffmpeg>=0.5
+pillow>=10
+numpy>=1.26
+av>=12,<19   # 19 quita metadata_errors y faster-whisper 1.2 falla
+yt-dlp>=2025.1.1
