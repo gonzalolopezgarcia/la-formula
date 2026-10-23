@@ -48,7 +48,7 @@ Si el vídeo acaba en «comenta X», el documento que recibe quien comenta se es
 - La hora real con `date`, en su zona (`marca/marca.json`).
 - 🚨 **No le preguntes a qué hora: propónsela, con el motivo**, y que diga sí u otra. Una línea, por ejemplo: «Lo
   programo hoy a las 19:30, media hora antes de tu pico de las 20:00, en Instagram, TikTok y Facebook a la vez; y
-  mañana las 9 pruebas de 08:00 a 21:00».
+  mañana las 4 pruebas a las 11:00, 13:00, 16:00 y 21:00».
 
 **Cómo se elige la hora**, por orden:
 

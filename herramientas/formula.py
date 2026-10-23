@@ -12,7 +12,7 @@ tu voz encima y una palabra cada vez). Todos se renderizan con HyperFrames.
   formula musica NOMBRE TIPO   la canción de ese tipo que lleva más tiempo sin sonar  → musica.wav
   formula render NOMBRE     el vídeo final y su portada en videos/salida (--borrador: rápido, para ver el ritmo)
   formula portada NOMBRE    solo la portada: el gancho sobre un fotograma con los ojos abiertos
-  formula pruebas NOMBRE --hashtags "…"   9 copias de prueba, cada una distinta   → videos/salida/pruebas/
+  formula pruebas NOMBRE --hashtags "…"   4 copias de prueba, cada una distinta   → videos/salida/pruebas/
 
 Ver .claude/skills/edicion/SKILL.md.
 """
@@ -1023,17 +1023,43 @@ GANCHOS_TRIAL_CLIP = {
 }
 
 
+# 4 pruebas al día a horas fijas. Medido sobre 52 pruebas: 9 copias al día del mismo vídeo bajaron la prueba típica
+# de unas 3.400 vistas a 190 en una semana (algunas a 0), y por franja la media mañana (11-13 h) fue la mejor y la
+# tarde (~17:45) la peor. Mantén las mismas horas unas dos semanas, vuelve a medir y mueve la peor.
+HORAS_DE_PRUEBA = ["11:00", "13:00", "16:00", "21:00"]
+
+
 def horas_de_prueba(n, dia=None):
-    """n horas repartidas por igual de 08:00 a 21:00, redondeadas a 5 min (con 9: 08:00, 09:40, 11:15, 12:55,
-    14:30, 16:10, 17:45, 19:25 y 21:00). Si el día es hoy, desde dentro de 15 minutos."""
+    """Las primeras n de HORAS_DE_PRUEBA. Si el día es hoy, solo las que quedan dentro de 15 minutos o más."""
     import datetime as dt
     from zoneinfo import ZoneInfo
     ahora = dt.datetime.now(ZoneInfo(config.marca()["zona_horaria"]))
     dia = dia or (ahora + dt.timedelta(days=1)).strftime("%Y-%m-%d")
-    desde = max(480, -(-(ahora.hour * 60 + ahora.minute + 15) // 5) * 5) if dia == ahora.strftime("%Y-%m-%d") else 480
-    tramo = 1260 - desde
-    minutos = [desde + (int(i * tramo / (n - 1) / 5 + 0.5) * 5 if n > 1 else 0) for i in range(n)]
-    return dia, [f"{m // 60:02d}:{m % 60:02d}" for m in minutos]
+    desde = ahora.hour * 60 + ahora.minute + 15 if dia == ahora.strftime("%Y-%m-%d") else 0
+    libres = [h for h in HORAS_DE_PRUEBA if int(h[:2]) * 60 + int(h[3:]) >= desde]
+    if n > len(libres):
+        sys.exit(f"Ese día quedan {len(libres)} horas de prueba y son {n} copias: otro día (--dia), o menos copias")
+    return dia, libres[:n]
+
+
+# El gancho a la vista del vídeo (el de solo-portada no sale en el vídeo). Cada copia lleva otro titular, que tú
+# apruebas antes, sin grabar nada más; si el vídeo no tiene gancho a la vista, se le pone los primeros 2,6 s
+GANCHO_A_LA_VISTA = re.compile(r'(<div class="gancho(?![^"]*solo-portada)[^"]*"[^>]*>).*?(</div>)', re.S)
+# Un vídeo que abre con su gráfico arriba no lleva titular encima: lo taparía. Solo cambia el estilo
+ABRE_CON_GRAFICO = re.compile(r'<section class="beat"[^>]*data-a="0(\.0+)?"')
+
+
+def admite_titular(guion):
+    return bool(GANCHO_A_LA_VISTA.search(guion)) or not ABRE_CON_GRAFICO.search(guion)
+
+
+def con_gancho(guion, texto):
+    if texto is None:
+        return guion
+    texto = texto.replace(" / ", "<br>")
+    if GANCHO_A_LA_VISTA.search(guion):
+        return GANCHO_A_LA_VISTA.sub(lambda m: m.group(1) + texto + m.group(2), guion, count=1)
+    return guion + f'\n<div class="gancho" data-a="0" data-b="2.6">{texto}</div>\n'
 
 
 def pruebas(args):
@@ -1047,6 +1073,17 @@ def pruebas(args):
         sys.exit('--hashtags: de 5 a 10, del tema del vídeo y sin los de alcance (#viral, #fyp): "#claudeai #ia …"')
     texto = pie.read_text(encoding="utf-8").strip()
     guion = (dir_ / "guion.html").read_text(encoding="utf-8")
+    titulares = [None] * (args.desde + args.n)
+    fichero_ganchos = dir_ / "ganchos-prueba.txt"
+    if admite_titular(guion):
+        if not fichero_ganchos.exists():
+            sys.exit(f"Falta {fichero_ganchos}: un titular por copia, una línea cada uno («/» parte la línea), "
+                     "aprobados antes (ver .claude/skills/pruebas/SKILL.md)")
+        titulares = [l.strip() for l in fichero_ganchos.read_text(encoding="utf-8").splitlines() if l.strip()]
+        if len(titulares) < args.desde + args.n:
+            sys.exit(f"{fichero_ganchos.name} trae {len(titulares)} titulares y hacen falta {args.desde + args.n}")
+    else:
+        print("  abre con su gráfico arriba: sin titular nuevo, cada copia cambia solo el estilo", flush=True)
     estilo = leer_ajustes(guion)["estilo"]
     partida_ = estilo == "partida"
     subs_, ganchos_ = {"partida": (SUBS_TRIAL_REMOTION, GANCHOS_TRIAL_REMOTION),
@@ -1067,7 +1104,7 @@ def pruebas(args):
         sub_css = f"#root .costura:not(.clave) {{ {subs_[sub_]} }}" if partida_ else f"#root .sub {{ {subs_[sub_]} margin-top:{baja}px; }}"
         retoque = (f"<style>\n{sub_css}\n#root .gancho {{ {ganchos_[gancho]} margin-top:{0 if estilo == 'clip' else baja}px; }}"
                    "\n</style>\n")
-        (carpeta(copia) / "guion.html").write_text(guion + "\n" + retoque, encoding="utf-8")
+        (carpeta(copia) / "guion.html").write_text(con_gancho(guion, titulares[i]) + "\n" + retoque, encoding="utf-8")
         construir(copia)
         crudo = carpeta(copia) / "render.mp4"
         subprocess.run([str(HF), "render", str(carpeta(copia)), "-o", str(crudo), "--fps", "30", "--quality", "delivery"],
@@ -1086,7 +1123,7 @@ def pruebas(args):
             sys.exit(f"{final.name} dura {duracion_de(final):.1f} s y a {vel}× tendría que durar {dur / vel:.1f}")
         shutil.rmtree(carpeta(copia))
         hechas.append(final)
-        print(f"  {final.name}: {vel}×, {color}, subtítulos «{sub_}», gancho «{gancho}», {baja} px más abajo", flush=True)
+        print(f"  {final.name}: «{titulares[i] or 'su gráfico de arranque'}», {vel}×, {color}, subtítulos «{sub_}», gancho «{gancho}», {baja} px más abajo", flush=True)
     # La hoja para mirarlas: el gancho (1 s) y un subtítulo (la mitad) de cada una, en dos filas
     hoja = destino / f"{args.nombre}-pruebas.jpg"
     entradas = []
@@ -1203,7 +1240,7 @@ def main():
     p = sub.add_parser("pruebas")
     p.add_argument("nombre")
     p.add_argument("--hashtags", required=True, help="de 5 a 10, del tema: cada copia lleva 5, en otro orden")
-    p.add_argument("--n", type=int, default=9, help="cuántas copias (9)")
+    p.add_argument("--n", type=int, default=4, help="cuántas copias (4, una por hora de prueba)")
     p.add_argument("--desde", type=int, default=0, help="la primera combinación: para seguir una tanda cortada")
     p.add_argument("--dia", help="el día en que salen, AAAA-MM-DD (por defecto, mañana)")
     p.set_defaults(f=pruebas)
