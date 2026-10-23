@@ -46,6 +46,7 @@ Una pregunta cada vez, con un ejemplo de respuesta, y lo que conteste va a su fi
 | Pregunta | Fichero |
 |---|---|
 | Su nombre o el de su marca, y sus cuentas de Instagram, TikTok y Facebook | `marca/marca.json` → `nombre`, `cuentas` |
+| De qué va su contenido: su sector («inmobiliaria», «fitness», «IA para empresas») | `sector` |
 | En qué idioma hace los vídeos y su zona horaria | `idioma`, `zona_horaria` |
 | Su color de acento (el de la palabra clave y la cifra que importa) y el de las tarjetas. Si no sabe, ofrécele tres combinaciones con contraste y que elija | `colores.acento`, `colores.panel` |
 | Sus letras, de las instaladas (Inter, Montserrat, Poppins para el texto; Bebas Neue o Anton para lo grande) | `letras` |
@@ -53,7 +54,7 @@ Una pregunta cada vez, con un ejemplo de respuesta, y lo que conteste va a su fi
 | Qué pie lleva en TikTok y Facebook (por ejemplo «IG: sucuenta»), o el mismo | `pie_otras_redes` |
 | Cómo habla, sus expresiones, lo que nunca diría y a quién le habla | `marca/voz.md` |
 | Palabras que no quiere en sus guiones | `palabras_prohibidas` |
-| Qué cuentas le inspiran y qué hacen bien | `marca/referentes.md` |
+| Qué cuentas le inspiran y qué hacen bien. Si no tiene, no pasa nada: /guion se las busca por su sector la primera vez que pida inspiración | `marca/referentes.md` |
 | Qué estilo de edición quiere por defecto y qué le gusta o no de los reels que ve | `marca/estilo.md` |
 
 Si tiene un reel suyo que le guste, mira sus fotogramas y propón colores y letras parecidos.

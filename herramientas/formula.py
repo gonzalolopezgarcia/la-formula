@@ -764,6 +764,46 @@ def captura(args):
     print(f"  {destino}  ({imagen.width}x{imagen.height})")
 
 
+def imagen(args):
+    """La imagen de verdad de algo (una cara, un meme, un producto) buscada en la web: las N primeras en
+    capturas/FICHERO-1.png… y una hoja numerada para elegir. En vez de un emoji o un icono, lo real.
+    Google pide captcha al Chrome sin ventana; Bing no."""
+    import io, urllib.parse, urllib.request
+    from PIL import Image, ImageDraw
+    navegador = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36"}
+    pide = lambda url: urllib.request.urlopen(urllib.request.Request(url, headers=navegador), timeout=20).read()
+    pagina = pide("https://www.bing.com/images/search?first=1&q=" + urllib.parse.quote(args.busqueda)).decode("utf-8", "ignore")
+    resultados = [json.loads(html.unescape(m)) for m in re.findall(r'class="iusc"[^>]*m="([^"]+)"', pagina)]
+    destino = carpeta(args.nombre) / "capturas"
+    destino.mkdir(parents=True, exist_ok=True)
+    bajadas = []
+    for r in resultados:
+        if len(bajadas) == args.n:
+            break
+        try:   # un GIF se queda en su primer fotograma; las que no bajan, fuera
+            img = Image.open(io.BytesIO(pide(r["murl"]))).convert("RGB")
+        except Exception:
+            continue
+        if min(img.size) < 200:
+            continue
+        fichero = destino / f"{args.fichero}-{len(bajadas) + 1}.png"
+        img.save(fichero, "PNG")
+        bajadas.append((fichero, img))
+        with open(destino / "fuentes.txt", "a", encoding="utf-8") as f:
+            f.write(f"{fichero.name}  ←  {r['murl']}  ({r.get('purl', '')})\n")
+    if not bajadas:
+        sys.exit(f"Sin imágenes para «{args.busqueda}»: prueba otras palabras")
+    hoja = Image.new("RGB", (360 * len(bajadas), 400), "white")
+    for k, (fichero, img) in enumerate(bajadas):
+        tamano = f"{img.width}x{img.height}"
+        img.thumbnail((350, 350))
+        hoja.paste(img, (360 * k + 5, 45))
+        ImageDraw.Draw(hoja).text((360 * k + 10, 10), f"{k + 1}  {tamano}", fill="black")
+        print(f"  {fichero}")
+    hoja.save(destino / f"{args.fichero}-hoja.jpg", quality=85)
+    print(f"Mira {destino / (args.fichero + '-hoja.jpg')} y usa la buena; las demás se borran.")
+
+
 def foto(args):
     """Fotogramas sueltos, juntos en una hoja para leerlos de un vistazo. En rojo, lo que tapa Instagram."""
     from PIL import Image, ImageDraw
@@ -1133,6 +1173,12 @@ def main():
     p.add_argument("--quita", help='selectores que estorban, además de los avisos de cookies: ".modal, #banner"')
     p.add_argument("--espera", type=float, default=1.0, help="segundos tras cargar, para lo que se pinta tarde")
     p.set_defaults(f=captura)
+    p = sub.add_parser("imagen")
+    p.add_argument("nombre")
+    p.add_argument("busqueda", help='lo que buscarías en Google Imágenes: "meme de alguien asintiendo"')
+    p.add_argument("fichero", help="nombre sin extensión: meme → capturas/meme-1.png…")
+    p.add_argument("--n", type=int, default=6, help="cuántas bajar para elegir")
+    p.set_defaults(f=imagen)
     p = sub.add_parser("musica")
     p.add_argument("nombre", nargs="?")
     p.add_argument("tipo", nargs="?", help="uno de los tipos de marca/musica.json; sin él, la lista")

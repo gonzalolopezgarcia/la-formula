@@ -38,6 +38,15 @@ Lo deciden sus palabras: no preguntes cuál. Un tema más «busca inspiración»
 
 ## Inspiración
 
+0. 🚨 **Sin referentes no se busca a ciegas.** La Fórmula llega sin sector ni cuentas: si `marca/referentes.md`
+   está vacío, primero una pregunta, «¿De qué va tu contenido, o en qué cuentas te fijas?».
+   - **Si te da cuentas**, van a `referentes.md` y sigues.
+   - **Si te da su sector**, apúntalo en `marca/marca.json` → `sector` y búscalas tú: en su Chrome, el buscador de
+     Instagram con dos o tres palabras de su sector, en su idioma y en inglés («inmobiliaria», «real estate
+     agent»). Los reels que salen son los que mejor van: de sus cuentas, las que hablan a cámara como él; de
+     cada una, su rejilla con `vistas-rejilla.js` (paso 2) y su mediana. Propón cinco en una tabla (cuenta,
+     seguidores, mediana de vistas, qué hace bien) y, con su sí, a `referentes.md`.
+   - Nunca cuentas de otro sector «por si acaso»: la inspiración vale si su público es como el suyo.
 1. Avísale de que vas a usar su Chrome (Claude in Chrome); todo es de lectura.
 2. La rejilla de cada cuenta de `marca/referentes.md` en `instagram.com/<cuenta>/reels/`, pegando
    `herramientas/vistas-rejilla.js` con la herramienta de JavaScript: el código y las visualizaciones de cada reel
@@ -60,14 +69,22 @@ se junta, se quita ni se añade, y no se aplican las reglas de abajo: ese reel y
      --ffmpeg-location herramientas/.bin "https://www.instagram.com/reel/<código>/"
    herramientas/formula-estudiar videos/estudio
    ```
-   Deja `transcript.txt` con cada frase y su segundo.
+   Deja `transcript.txt` con cada frase y su segundo. Si Whisper parte las frases por la mitad, rehazlo con una
+   frase por línea desde `palabras.json`; una de 30 palabras o más se puede partir en la coma donde cambia la
+   idea, para grabarla en dos tomas. Luego mira sus fotogramas cada 0,5 s (`ffmpeg -i v.mp4 -vf
+   "fps=2,scale=216:384,tile=6x4" hoja-%02d.jpg`): de ahí salen sus escenas y lo que se ve.
 2. **`hablado.json` con `copia`**: un solo gancho (su primera frase traducida; en `pantalla`, su gancho de pantalla
    traducido) y **una toma por línea de su transcripción**, con `original` (la suya, tal cual) y `texto` (la
    traducción). El `titular` es su titular de pantalla traducido y la `pantalla`, su gráfico en ese segundo: así
    /edicion lo calca.
-3. Lo único que cambia sin preguntar: la palabra del «comenta X» pasa a ser la de lo que tú mandas. Cada cambio va
-   en `cambio` en esa toma, con el motivo. Si algo suyo no te vale (una cifra que no es tuya, «mi empresa»), no se
-   toca: pregúntaselo al darle el guion.
+   **Sus escenas también**: `escena` en el gancho o la toma donde empieza cada una: el sitio, el plano (selfie con
+   el 0,5×, plano abierto desde un trípode), lo que hace (andar, comprar algo, comérselo) y dónde cae el corte
+   («corte en "La número uno"»). Al darle el guion, cada escena va como una línea encima de su toma: así lo graba igual.
+3. Lo único que cambia sin preguntar: la palabra del «comenta X» pasa a ser la de lo que tú mandas, **una sola**
+   aunque el original pida dos. Cada cambio va en `cambio` en esa toma, con el motivo. Una palabra suya que tu
+   público no conoce («slop») va en tu idioma («cutre»), en todas partes. Si algo suyo no te vale (una cifra que no
+   es tuya, «mi empresa», una herramienta que no tienes), no se toca: pregúntaselo al darle el guion y, con su sí,
+   pasa a lo que sí tiene, con la misma idea («un MCP que busca virales» → «una skill que busca virales»).
 4. El comprobador (paso 6) en modo copia falla si falta una frase suya, sobra una, van en otro orden o una
    traducción tiene menos del 70 % de sus palabras.
 

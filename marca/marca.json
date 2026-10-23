@@ -1,6 +1,7 @@
 {
   "_ayuda": "Tu marca. La leen las herramientas y las skills. /empezar te la rellena con una entrevista; cambia lo que quieras a mano.",
   "nombre": "",
+  "sector": "",
   "idioma": "es",
   "zona_horaria": "Europe/Madrid",
   "cuentas": { "instagram": "", "tiktok": "", "facebook": "" },

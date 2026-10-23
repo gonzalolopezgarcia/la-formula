@@ -45,6 +45,11 @@ Cada vídeo vive en `videos/trabajo/<nombre>/` (nombre: `AAAA-MM-DD-tema`). El l
 
 1. **Los clips**: en `videos/entrada/` o en la carpeta que diga. Con un número delante manda el orden
    («1 IMG_8581.MOV»); si no, la hora de grabación. Si dice que uno va primero, cópialos a otra carpeta con su número.
+   - **El B-roll** (un sitio, un objeto, algo que nombra) no se le pide: búscalo entre sus clips y sus fotos de ese
+     día. 🚨 **Si no existe `~/Library/CloudStorage/GoogleDrive-*`, sugiérele en una línea conectar su Drive**:
+     «si guardas tu B-roll en Google Drive, instala Google Drive para escritorio y lo cojo de ahí». Una vez por
+     vídeo, y sigue sin él. Con Drive para escritorio su carpeta es una carpeta más del ordenador; el conector de
+     Drive del chat solo encuentra ficheros, no puede traerte un vídeo.
 2. **Preparar** (~30 s por cada 25 s de clips):
    ```bash
    herramientas/formula preparar <nombre> --clips <carpeta> --pista "Claude, Notion"
@@ -61,6 +66,9 @@ Cada vídeo vive en `videos/trabajo/<nombre>/` (nombre: `AAAA-MM-DD-tema`). El l
    - Palabras mal oídas: `--cambia "Cloud=Claude"` o, una sola, `--cambia "#185=programación."`.
    - Volver a pasar `preparar` con esas opciones tarda segundos (no transcribe otra vez).
    - **Una frase con un dato dudoso se le señala y decide él**: nunca se quita sola.
+   - **Si ha soltado el rollo** (sin guion, o un minuto o más por encima de lo que durará el reel): apunta las
+     frases que no sirven a la idea principal del gancho, con su número de `frases.txt`, en la tabla del borrador,
+     y quítalas con `--fuera` solo con su sí.
    - Si avisa de un **corte sobre la voz**, quita la frase entera o mueve el corte: se oye el tijeretazo.
 4. **Mira el encuadre**: guion vacío (`<!-- ajustes: sub-y=932 -->`) y `herramientas/formula foto <nombre> 3`.
    Apunta dónde empieza su pelo: el hueco de cada bloque va de 250 px hasta ahí. Si la pared de detrás es
@@ -124,6 +132,32 @@ Medidas en reels editados que funcionan (59 s, 23 titulares):
   marca. Si todo es especial, nada lo es.
 - **Lo que no hay**: zooms, B-roll, transiciones, emojis.
 - En tu idioma, sin rayas largas (—) y con cada cifra comprobada antes de dibujarla.
+
+## Que no se note que lo ha editado una IA
+
+Lo que delata una edición hecha con IA, y lo que hacemos en su lugar (en todos los estilos):
+
+| Lo cutre | Lo que hacemos |
+|---|---|
+| Texto animado: subtítulos en píldoras, letras mezcladas, chispitas, botes | Subtítulos quietos y sencillos, de 2 a 4 palabras. Lo cutre solo como chiste, en las palabras que lo nombran (abajo) |
+| Un emoji o un icono de línea en lugar de una idea (🤖, 💰, una bombilla) | **Una imagen de verdad**: el logo, la cara, el meme, el producto. De su fuente (`captura`) o con `herramientas/formula imagen <nombre> "<búsqueda>" <fichero>`, que baja las 6 primeras de una búsqueda de imágenes y deja una hoja numerada para elegir. `data-icono` solo dentro de una app redibujada que lo enseñe |
+| Tiempos muertos | Cada pausa de más de 0,12 s se va (`preparar` ya lo hace) |
+| Frases que no sirven al gancho | Si ha soltado el rollo, se le proponen para quitar (paso 3) |
+| Un aviso hortera: degradado, estrellas, «¡¡VAMOOOS!! 🔥», cosas que laten | **Un aviso es la pantalla de una app de verdad** (la notificación del móvil, el chat de Claude, los comentarios de Instagram, Google, Fotos, los conectores de Claude) en tu cristal, arriba. Entra con el movimiento de esa app (la notificación cae) o en un fotograma; solo se mueve lo de dentro, como en la app: el texto que se escribe mientras lo dice, el botón que se pone verde, la barra que se llena |
+| Imágenes de banco | Las suyas: sus fotos y capturas de ese día y sus clips |
+
+**Trucos que funcionan**, cuando encajen (y en una copia, todos los del original):
+
+- **Enseña lo malo mientras lo nombra.** En «cutre» y en «anima demasiado el texto», los propios subtítulos se
+  vuelven cutres; en «avisos sin animar», el hortera y el limpio uno al lado del otro. Una o dos veces por reel.
+- **La prueba son sus números**: dos reels suyos lado a lado con sus vistas de verdad, «CUTRE» en rojo sobre el
+  que no funcionó y «VIRAL» en verde sobre el que sí. Ese es el gancho; no necesita titular.
+- **El «comenta X» vive en la pantalla**: la cabecera de cada tarjeta del chat dice «Comenta X y te paso mi
+  setup», y cada «comenta X» lleva los comentarios de Instagram con la palabra escribiéndose, publicada y el
+  corazón poniéndose rojo.
+- **La vida real debajo**: un sitio nuevo por punto, cortando en «La número X», y una historia pequeña (compra
+  algo y se lo come hasta el final); lo que dice otra persona, en letra pequeña amarilla a su lado; la gente que
+  pasa, con la cara borrosa.
 
 ## Los efectos de sonido: uno por idea, en su remate
 
@@ -189,6 +223,7 @@ Cuando nombra algo real (una noticia, una herramienta, sus números), su imagen 
   herramientas/formula captura <nombre> <url> anuncio --portada      # la imagen con la que la web se anuncia
   herramientas/formula captura <nombre> <url> titular --recorte "0,160,640,215"
   herramientas/formula captura <nombre> <url> tabla --selector "table"
+  herramientas/formula imagen <nombre> "meme de alguien asintiendo" meme   # una imagen real buscada en la web
   ```
   🚨 Abre y mira cada captura antes de usarla. Si la web no deja (muro de pago, bloqueo), otra fuente o pídesela.
 
@@ -222,6 +257,11 @@ mismos bloques, mismos gráficos, mismo tamaño, mismas animaciones y mismos mom
 fotogramas cada 0,5 s del original (`ffmpeg -i v.mp4 -vf "fps=2,scale=216:384,tile=6x4" hoja-%02d.jpg`), un
 bloque nuestro por cada uno suyo y, antes del borrador, un fotograma suyo y uno nuestro del mismo bloque, juntos.
 Los colores, las letras y las piezas son los suyos (marca.json): se copia el qué y el cuándo, nunca el aspecto.
+
+- **Sus escenas también**: el guion trae `escena` en la toma donde empieza cada una (el sitio, el plano, lo que
+  hace). Antes de `preparar`, comprueba que sus clips cubren cada escena en ese orden; si falta una, díselo antes
+  de montar, como una frase que falta.
+- **Su canción**, a su nivel bajo la voz: búscala, añádela con `musica --anadir` y apunta de qué reel sale.
 
 ## Si contesta un mensaje: llega como notificación
 

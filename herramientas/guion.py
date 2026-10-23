@@ -102,9 +102,9 @@ def avisos_copia(g: dict) -> list[str]:
             a.append(f"copia: frase {i}, {palabras(dicho)} palabras y la suya {palabras(o)}: ¿resumida? Va entera")
         if o and palabras(dicho) > 1.6 * palabras(o) + 3:
             a.append(f"copia: frase {i}, {palabras(dicho)} palabras y la suya {palabras(o)}: ¿añadido algo?")
-    palabra = g.get("cta", {}).get("palabra", "")
-    if palabra and not any(palabra.lower() in t.get("texto", "").lower() for t in tomas[-2:]):
-        a.append(f"el cierre tiene que decir «{palabra}», donde él dice la suya")
+    palabra = g.get("cta", {}).get("palabra", "")   # en su sitio, que puede no ser el final
+    if palabra and not any(palabra.lower() in t.get("texto", "").lower() for t in tomas):
+        a.append(f"ninguna toma dice «{palabra}»: va donde él dice la suya")
     if palabra and palabra.lower() not in g.get("pie", "").lower():
         a.append(f"el pie no dice «comenta {palabra}»")
     fichero = g.get("cta", {}).get("fichero")
