@@ -82,7 +82,7 @@ se junta, se quita ni se añade, y no se aplican las reglas de abajo: ese reel y
    («corte en "La número uno"»). Al darle el guion, cada escena va como una línea encima de su toma: así lo graba igual.
 3. Lo único que cambia sin preguntar: la palabra del «comenta X» pasa a ser la de lo que tú mandas, **una sola**
    aunque el original pida dos. Cada cambio va en `cambio` en esa toma, con el motivo. Una palabra suya que tu
-   público no conoce («slop») va en tu idioma («cutre»), en todas partes. Si algo suyo no te vale (una cifra que no
+   público no conoce («slop») va en tu idioma («genérico»), en todas partes. Si algo suyo no te vale (una cifra que no
    es tuya, «mi empresa», una herramienta que no tienes), no se toca: pregúntaselo al darle el guion y, con su sí,
    pasa a lo que sí tiene, con la misma idea («un MCP que busca virales» → «una skill que busca virales»).
 4. El comprobador (paso 6) en modo copia falla si falta una frase suya, sobra una, van en otro orden o una

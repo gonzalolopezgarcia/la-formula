@@ -137,9 +137,9 @@ Medidas en reels editados que funcionan (59 s, 23 titulares):
 
 Lo que delata una edición hecha con IA, y lo que hacemos en su lugar (en todos los estilos):
 
-| Lo cutre | Lo que hacemos |
+| Lo que delata a la IA | Lo que hacemos |
 |---|---|
-| Texto animado: subtítulos en píldoras, letras mezcladas, chispitas, botes | Subtítulos quietos y sencillos, de 2 a 4 palabras. Lo cutre solo como chiste, en las palabras que lo nombran (abajo) |
+| Texto animado: subtítulos en píldoras, letras mezcladas, chispitas, botes | Subtítulos quietos y sencillos, de 2 a 4 palabras. Lo hortera solo como chiste, en las palabras que lo nombran (abajo) |
 | Un emoji o un icono de línea en lugar de una idea (🤖, 💰, una bombilla) | **Una imagen de verdad**: el logo, la cara, el meme, el producto. De su fuente (`captura`) o con `herramientas/formula imagen <nombre> "<búsqueda>" <fichero>`, que baja las 6 primeras de una búsqueda de imágenes y deja una hoja numerada para elegir. `data-icono` solo dentro de una app redibujada que lo enseñe |
 | Tiempos muertos | Cada pausa de más de 0,12 s se va (`preparar` ya lo hace) |
 | Frases que no sirven al gancho | Si ha soltado el rollo, se le proponen para quitar (paso 3) |
@@ -148,9 +148,9 @@ Lo que delata una edición hecha con IA, y lo que hacemos en su lugar (en todos 
 
 **Trucos que funcionan**, cuando encajen (y en una copia, todos los del original):
 
-- **Enseña lo malo mientras lo nombra.** En «cutre» y en «anima demasiado el texto», los propios subtítulos se
-  vuelven cutres; en «avisos sin animar», el hortera y el limpio uno al lado del otro. Una o dos veces por reel.
-- **La prueba son sus números**: dos reels suyos lado a lado con sus vistas de verdad, «CUTRE» en rojo sobre el
+- **Enseña lo malo mientras lo nombra.** En «genérico» y en «anima demasiado el texto», los propios subtítulos se
+  vuelven horteras; en «avisos sin animar», el hortera y el limpio uno al lado del otro. Una o dos veces por reel.
+- **La prueba son sus números**: dos reels suyos lado a lado con sus vistas de verdad, «GENÉRICO» en rojo sobre el
   que no funcionó y «VIRAL» en verde sobre el que sí. Ese es el gancho; no necesita titular.
 - **El «comenta X» vive en la pantalla**: la cabecera de cada tarjeta del chat dice «Comenta X y te paso mi
   setup», y cada «comenta X» lleva los comentarios de Instagram con la palabra escribiéndose, publicada y el
