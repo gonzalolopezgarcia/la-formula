@@ -87,7 +87,7 @@ def cortar(c, dur, destino, entra=0.0, tipo=None):
     solo suena lo demás) y siempre desde «desde», para que el golpe caiga ahí; si no llega, repite de «desde» a
     «hasta» fundiendo cada vuelta. Devuelve el segundo desde el que suena."""
     lecho, cancion = dur - entra, str(fichero(c))
-    final = (f"{NIVEL.get(tipo or c['tipos'][0], VOLUMEN)},afade=t=in:d={0.1 if entra else 1.5},afade=t=out:st={lecho - 2.5:.3f}:d=2.5"
+    final = (f"{NIVEL.get(tipo or c['tipos'][0], VOLUMEN)},afade=t=in:d={0.1 if entra else 0.2},afade=t=out:st={lecho - 2.5:.3f}:d=2.5"
              + (f",aresample=48000,adelay={int(entra * 1000)}:all=1,apad=whole_dur={dur:.3f}" if entra else ""))
     a, b, funde = c.get("desde", 0), c.get("hasta", c["largo"]), 1.5
     if entra and a + lecho > b:

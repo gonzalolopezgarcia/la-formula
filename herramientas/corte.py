@@ -127,6 +127,9 @@ def ajustar_a_la_voz(video, tramos, silencio=SILENCIO_MAX):
     db = 20 * np.log10(np.sqrt((x[:n * paso].reshape(n, paso) ** 2).mean(1)) + 1e-9)
     # Voz = hasta 18 dB por debajo de tu voz normal en este vídeo. Más abajo: respiraciones y eco de la sala
     suena = db > np.percentile(db, 90) - 18
+    # La cola de una palabra que se apaga suena por debajo de ese umbral y se perdía: se mide con uno 12 dB más
+    # suave, siempre 8 dB por encima del ruido de la sala (en la calle no alarga nada)
+    suave = db > max(np.percentile(db, 90) - 30, np.percentile(db, 20) + 8)
 
     # Si en el borde de una palabra aún suena (Whisper la da por acabada antes), el trozo sigue hasta que se
     # apaga: 0,3 s como mucho y sin pisar al de al lado. Si no, se come la última sílaba
@@ -157,9 +160,15 @@ def ajustar_a_la_voz(video, tramos, silencio=SILENCIO_MAX):
                 ini = k
             fin = k
         salida.append([ini / 100, (fin + 1) / 100])
+    for k, seg in enumerate(salida):   # cada trozo acaba cuando la palabra deja de sonar de verdad: 0,4 s como mucho
+        e = int(round(seg[1] * 100))
+        tope = min(n, e + 40, int(salida[k + 1][0] * 100) if k + 1 < len(salida) else n)
+        while e < tope and suave[e]:
+            e += 1
+        seg[1] = e / 100
     final = []
     for (a, b), (wa, wb) in zip(salida, [next(t for t in tramos if t[0] - 0.01 <= s[0] <= t[1]) for s in salida]):
-        a, b = max(wa, a - AIRE_ANTES), min(wb, b + AIRE_DESPUES)
+        a, b = max(wa, a - AIRE_ANTES), b if b > wb else min(wb, b + AIRE_DESPUES)   # la cola suave no se recorta
         if final and a - final[-1][1] < 0.1:  # quitar menos de 0,1 s solo da un salto de imagen
             final[-1][1] = b
         else:
