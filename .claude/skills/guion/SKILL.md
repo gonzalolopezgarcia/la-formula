@@ -1,6 +1,6 @@
 ---
 name: guion
-description: Escribe el guion de un reel hablado a cámara, con las reglas de los que funcionan. Tres modos según lo que digas - (1) INSPIRACIÓN («busca inspiración», o sin tema ni enlace) mira los reels recientes que mejor van de tus referentes y te propone tres; (2) TEMA («hazme el guion de X») comprueba si el tema puede funcionar, elige el molde y te da tomas numeradas con tres ganchos; (3) COPIA (un enlace, «cópiame este reel») traduce ese reel frase a frase, entero y en orden. Úsala con «hazme el guion», «qué digo en el reel de X», «busca inspiración», «cópiame este reel», «escríbeme el vídeo de X». Deja listo el pie, lo que se manda por privado y los titulares para /edicion. No edita (/edicion) ni sube (/subida).
+description: Escribe el guion de un reel hablado a cámara, con las reglas de los que funcionan. Tres modos según lo que digas - (1) INSPIRACIÓN («busca inspiración», o sin tema ni enlace) mira los reels recientes que mejor van de tus referentes y te propone tres; (2) TEMA («hazme el guion de X») comprueba si el tema puede funcionar, elige el molde y te da tomas numeradas con tres ganchos que se graban los tres y un segundo cuerpo (lo mismo dicho de otra forma), para sacar seis vídeos de una grabación; (3) COPIA (un enlace, «cópiame este reel») traduce ese reel frase a frase, entero y en orden. Úsala con «hazme el guion», «qué digo en el reel de X», «busca inspiración», «cópiame este reel», «escríbeme el vídeo de X». Deja listo el pie, lo que se manda por privado y los titulares para /edicion. No edita (/edicion) ni sube (/subida).
 ---
 
 # Guion: lo que dices y cómo lo cuentas
@@ -110,6 +110,25 @@ Poner «comenta X» por sí solo no mueve nada: lo que funciona es lo que se man
 lleva quien mira. O lo que tiene que hacer, o la idea en limpio. **Contesta al gancho**: lo que el gancho abrió,
 la conclusión lo cierra con palabras parecidas. Si al grabar no la dice, díselo antes de editar, con la frase.
 
+### 🚨 Se graban los tres ganchos y un segundo cuerpo
+
+Para las pruebas (/pruebas) hacen falta vídeos distintos de verdad, no el mismo con otro titular: cinco copias casi
+iguales se quedan en 0 visualizaciones. Así que cada guion de Tema o de Inspiración se graba en piezas y /edicion saca
+hasta seis vídeos (3 ganchos × 2 cuerpos): el gancho 1 con el cuerpo 1 es el reel normal y los otros cinco, sus
+pruebas, una al día.
+
+- **Los tres ganchos se graban**, cada uno con su frase 2 (`puente`). El 1 va en el reel normal: ninguno es de
+  relleno.
+- **El cuerpo 2 (`cuerpo2`)**: la misma información que el cuerpo 1, **con otras palabras y en otro orden**. Lleva
+  las mismas `parte`, empieza por otra (el resultado, el ejemplo) y ninguna frase es igual que en el 1: el
+  comprobador avisa. Dura parecido (±25 %) y no lleva `puente`, `conclusion`, `iman` ni `cta`: el cierre es uno para
+  los dos cuerpos y se graba una vez, así que tiene que contestar a los tres ganchos.
+- Si el tema no da para dos formas (un `regalo` de 20 s, una historia contada en su orden), sin `cuerpo2`: las
+  pruebas cambian solo el gancho. Díselo.
+- **Cómo se graba: tres clips.** El 1, los tres ganchos seguidos (cada uno con su frase 2); el 2, el cuerpo 1 y el
+  cierre; el 3, el cuerpo 2. Una pausa entre pieza y pieza.
+- Una **Copia** se queda con su único gancho y sin `cuerpo2`: es su reel, frase a frase.
+
 ### 🚨 El gancho da una razón para pararse, no resume el reel
 
 La prueba: **¿se pararía alguien que no sabe nada del tema?** Cada gancho lleva escrita su razón (`para`) y, de los
@@ -155,8 +174,8 @@ tres que le das, cada uno engancha por una distinta:
    ```bash
    herramientas/formula-guion videos/trabajo/<carpeta>/hablado.json
    ```
-7. **Dáselo para grabar**: las tomas numeradas en el chat, con el gancho recomendado en la 1 y los otros dos debajo
-   en una línea. Que lo grabe con sus palabras: luego se edita sobre lo que dijo de verdad (`frases.txt`).
+7. **Dáselo para grabar**: en el chat, los tres ganchos (cada uno con su frase 2, el 1 marcado: va en el reel
+   normal), luego las tomas numeradas y «Cuerpo 2» al final, todo para grabar en tres clips. Que lo grabe con sus palabras: luego se edita sobre lo que dijo de verdad (`frases.txt`).
 8. **Cuando mande los vídeos**: /edicion. Cruza `frases.txt` con `hablado.json`: qué tomas dijo, cuáles se saltó y
    qué añadió. Lo que añadió con una cifra o un «gratis» se comprueba antes de ponerlo en pantalla. Si no cerró la
    idea, díselo antes de editar.
@@ -172,7 +191,7 @@ tres que le das, cada uno engancha por una distinta:
 | Gancho dicho | Una razón para pararse, en 17 palabras como mucho (26 en `caso` y `comparacion`, 14 en `regalo`, 12 en `sistema`), con lo que importa delante: un nombre que conoce todo el mundo, la cifra, «Uso…», «Ayer dejé que…» |
 | Lo que nunca abre | Un saludo, una pregunta, «hoy os traigo», «en este vídeo» |
 | Gancho en pantalla | Dos líneas, de 3 a 6 palabras, sin emoji. Promete; no repite lo que dice la voz |
-| Tres ganchos | Cada uno con un `para` distinto y **su propio puente** |
+| Tres ganchos | Cada uno con un `para` distinto y **su propio puente**. Se graban los tres: uno por prueba |
 | Segunda frase | Un puente de 5 a 9 palabras que mantiene la intriga o promete el cómo: «Así se monta». Sale de lo que dice su gancho |
 | Frases | Una idea cada una y 20 palabras como mucho (hablando sin guion salen de 26 a 42: pártelas) |
 | Ritmo | ~4,4 palabras por segundo ya editado: 200 palabras son 45 s |
@@ -218,6 +237,7 @@ solo apunta en `cta.manda` qué es. El formato: **un solo problema, resuelto ent
   "cta": { "palabra": "UNA", "manda": "qué es y qué lleva dentro", "fichero": "videos/trabajo/…/una.md" },
   "ganchos": [ { "para": "imposible", "dicho": "La frase que dices", "pantalla": "DOS LÍNEAS|EN PANTALLA", "puente": "Tu frase 2, que sale de esta" } ],
   "tomas": [ { "parte": "puente", "texto": "Lo que dices", "titular": "De 2 a 5 palabras", "pantalla": "qué se ve o qué captura hace falta" } ],
+  "cuerpo2": [ { "parte": "resultado", "texto": "Lo mismo que el cuerpo 1, con otras palabras y en otro orden", "titular": "…", "pantalla": "…" } ],
   "fuentes": [ "De dónde sale cada cifra y cada «gratis», con su fecha" ],
   "pie": "Una frase.\n\nSígueme y comenta UNA y te envío … por privado."
 }
@@ -225,7 +245,8 @@ solo apunta en `cta.manda` qué es. El formato: **un solo problema, resuelto ent
 
 Las `parte`: `puente`, `que-es`, `hueco` (lo que le pasa hoy a casi todo el mundo), `paso`, `punto` (los de una
 lista), `resultado`, `por-que`, `prueba`, `conclusion`, `iman` (lo que mandas) y `cta`. El `titular` resume, no
-transcribe: es lo que /edicion pone arriba.
+transcribe: es lo que /edicion pone arriba. `cuerpo2` es opcional: las tomas entre el puente y el cierre, dichas de
+otra forma («Se graban los tres ganchos y un segundo cuerpo»).
 
 ## Tus correcciones
 

@@ -116,6 +116,54 @@ def avisos_copia(g: dict) -> list[str]:
     return a
 
 
+def avisos_tomas(tomas: list[dict], nombre: str) -> list[str]:
+    a = []
+    for i, t in enumerate(tomas, 1):
+        if t.get("parte") not in PARTES:
+            a.append(f"{nombre} {i}: parte «{t.get('parte')}»; vale {', '.join(PARTES)}")
+        for f in frases(t.get("texto", "")):
+            if palabras(f) > FRASE_MAX:
+                a.append(f"{nombre} {i}: una frase de {palabras(f)} palabras («{' '.join(f.split()[:6])}…»). Pártela: una idea, {FRASE_MAX} como mucho")
+        titular = t.get("titular", "")
+        if not titular:
+            a.append(f"{nombre} {i}: sin titular para el edit (de 2 a 5 palabras)")
+        elif palabras(titular) > 5:
+            a.append(f"{nombre} {i}: el titular «{titular}» tiene {palabras(titular)} palabras; son de 2 a 5")
+        elif titular.lower().rstrip(".") in t.get("texto", "").lower():
+            a.append(f"{nombre} {i}: el titular «{titular}» repite lo que dice; resume, no transcribe")
+    return a
+
+
+CIERRE = ("conclusion", "iman", "cta")   # el mismo para los dos cuerpos: se graba una vez
+
+
+def avisos_cuerpo2(tomas: list[dict], cuerpo2: list[dict]) -> list[str]:
+    """El cuerpo 2: lo mismo que el 1, con otras palabras y en otro orden. Con los tres ganchos salen seis vídeos
+    distintos (3 ganchos × 2 cuerpos): el normal y cinco pruebas, uno al día. Cinco copias del mismo vídeo con otro
+    titular no engañan a Instagram; seis vídeos de verdad, sí."""
+    a = []
+    uno = [t for t in tomas if t.get("parte") not in ("puente", *CIERRE)]
+    for i, t in enumerate(cuerpo2, 1):
+        if t.get("parte") in ("puente", *CIERRE):
+            a.append(f"cuerpo 2, toma {i}: «{t['parte']}» no va aquí; el puente es de cada gancho y el cierre, de los dos cuerpos")
+    falta = {t.get("parte") for t in uno} - {t.get("parte") for t in cuerpo2}
+    if falta:
+        a.append(f"el cuerpo 2 no cuenta {', '.join(sorted(falta))}: lleva lo mismo que el 1")
+    if [t.get("parte") for t in uno] == [t.get("parte") for t in cuerpo2]:
+        a.append("el cuerpo 2 va en el mismo orden que el 1: que empiece por otra cosa (el resultado, el ejemplo)")
+    # Una frase igual en los dos sería la misma toma dos veces: el corte se queda con la última
+    limpia = lambda f: re.sub(r"[^\wáéíóúñü ]", "", f.lower()).strip()
+    dichas = {limpia(f) for t in uno for f in frases(t.get("texto", ""))}
+    for i, t in enumerate(cuerpo2, 1):
+        for f in frases(t.get("texto", "")):
+            if limpia(f) in dichas:
+                a.append(f"cuerpo 2, toma {i}: «{' '.join(f.split()[:6])}…» está igual en el cuerpo 1: dilo de otra forma")
+    p1, p2 = (sum(palabras(t.get("texto", "")) for t in lista) for lista in (uno, cuerpo2))
+    if p1 and not 0.75 <= p2 / p1 <= 1.25:
+        a.append(f"el cuerpo 2 dura {segundos(p2):.0f} s y el 1, {segundos(p1):.0f} s: que se parezcan")
+    return a
+
+
 def avisos(g: dict) -> list[str]:
     if g.get("copia"):
         return avisos_copia(g)
@@ -160,19 +208,9 @@ def avisos(g: dict) -> list[str]:
 
     tomas = g.get("tomas", [])
     partes = [t.get("parte") for t in tomas]
-    for i, t in enumerate(tomas, 1):
-        if t.get("parte") not in PARTES:
-            a.append(f"toma {i}: parte «{t.get('parte')}»; vale {', '.join(PARTES)}")
-        for f in frases(t.get("texto", "")):
-            if palabras(f) > FRASE_MAX:
-                a.append(f"toma {i}: una frase de {palabras(f)} palabras («{' '.join(f.split()[:6])}…»). Pártela: una idea, {FRASE_MAX} como mucho")
-        titular = t.get("titular", "")
-        if not titular:
-            a.append(f"toma {i}: sin titular para el edit (de 2 a 5 palabras)")
-        elif palabras(titular) > 5:
-            a.append(f"toma {i}: el titular «{titular}» tiene {palabras(titular)} palabras; son de 2 a 5")
-        elif titular.lower().rstrip(".") in t.get("texto", "").lower():
-            a.append(f"toma {i}: el titular «{titular}» repite lo que dice; resume, no transcribe")
+    a += avisos_tomas(tomas, "toma")
+    if g.get("cuerpo2"):
+        a += avisos_tomas(g["cuerpo2"], "cuerpo 2, toma") + avisos_cuerpo2(tomas, g["cuerpo2"])
     if molde != "lista" and partes[:1] != ["puente"]:
         a.append("la segunda frase es el puente («Así se monta», «Te enseño cómo»): de 5 a 9 palabras")
     if partes[:1] == ["puente"] and ganchos and ganchos[0].get("puente") and tomas[0]["texto"] != ganchos[0]["puente"]:
@@ -214,10 +252,11 @@ def avisos(g: dict) -> list[str]:
     if palabra and palabra.lower() not in pie.lower():
         a.append(f"el pie no dice «comenta {palabra}»")
 
-    todo = " ".join([h.get("dicho", "") + " " + h.get("pantalla", "") for h in ganchos] + [t.get("texto", "") + " " + t.get("titular", "") for t in tomas] + [pie])
+    cuerpo2 = g.get("cuerpo2", [])
+    todo = " ".join([h.get("dicho", "") + " " + h.get("pantalla", "") for h in ganchos] + [t.get("texto", "") + " " + t.get("titular", "") for t in tomas + cuerpo2] + [pie])
     if "—" in todo or "–" in todo:
         a.append("hay una raya larga: fuera")
-    dicho = " ".join(t.get("texto", "") for t in tomas) + " " + " ".join(h.get("dicho", "") for h in ganchos)
+    dicho = " ".join(t.get("texto", "") for t in tomas + cuerpo2) + " " + " ".join(h.get("dicho", "") for h in ganchos)
     if re.search(r"\d|gratis|gratuit", dicho) and not g.get("fuentes"):
         a.append("hay cifras o un «gratis» y ninguna fuente apuntada: se comprueba antes de escribirlo")
     # Cada cifra dicha, en una fuente; y «gratis» solo si eso mismo funciona sin pagar
@@ -234,9 +273,10 @@ def avisos(g: dict) -> list[str]:
     for i, h in enumerate(ganchos, 1):
         if m := re.search(DE_IA, h.get("dicho", "").lower()):
             a.append(f"gancho {i}: «{m.group(0)}» suena a IA. Dilo directo")
-    for i, t in enumerate(tomas, 1):
-        if m := re.search(DE_IA, t.get("texto", "").lower()):
-            a.append(f"toma {i}: «{m.group(0)}» suena a IA. Dilo directo")
+    for nombre, lista in (("toma", tomas), ("cuerpo 2, toma", cuerpo2)):
+        for i, t in enumerate(lista, 1):
+            if m := re.search(DE_IA, t.get("texto", "").lower()):
+                a.append(f"{nombre} {i}: «{m.group(0)}» suena a IA. Dilo directo")
     # La palabra del «comenta X» no se repite nunca: los reels viejos siguen recibiendo comentarios y la respuesta
     # automática mandaría el fichero que no es
     if palabra:
@@ -270,6 +310,9 @@ def comprobar(ruta: Path) -> tuple[dict, list[str]]:
     if g.get("molde") in MOLDES and g.get("ganchos"):
         total = palabras(g["ganchos"][0]["dicho"]) + sum(palabras(t.get("texto", "")) for t in g.get("tomas", []))
         print(f"{g.get('nombre')} · {g['molde']} · {total} palabras · {segundos(total):.0f} s con el gancho 1")
+        if g.get("cuerpo2"):
+            dos = sum(palabras(t.get("texto", "")) for t in g["cuerpo2"])
+            print(f"  cuerpo 2: {dos} palabras · {segundos(dos):.0f} s (con los 3 ganchos salen 6 vídeos: el normal y 5 pruebas)")
     for i, p in enumerate(g.get("ganchos", [])[:1] + g.get("tomas", []), 1):
         if g.get("copia") and p.get("cambio"):
             print(f"  cambiado a propósito, frase {i}: {p['cambio']} (se dice al dar el guion)")
