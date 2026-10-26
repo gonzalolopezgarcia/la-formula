@@ -4,6 +4,7 @@ abajo), «clip» (el clip de otro arriba y tú debajo escuchando; luego tú a pa
 tu voz encima y una palabra cada vez). Todos se renderizan con HyperFrames.
 
   formula preparar NOMBRE   junta los clips, quita silencios y transcribe     → base.mp4, frases.txt
+                            con --piezas, tres ganchos y dos cuerpos: hasta seis vídeos (piezas.py)
   formula vlog NOMBRE --clips CARPETA | --montar | --voz FICHERO   estilo vlog (vlog.py)
   formula clip NOMBRE URL   estilo clip: el vídeo de otro, transcrito; con --trozos, cortado → clip.mp4
   formula armar NOMBRE      guion.html + subtítulos                            → index.html (y lo valida)
@@ -12,7 +13,8 @@ tu voz encima y una palabra cada vez). Todos se renderizan con HyperFrames.
   formula musica NOMBRE TIPO   la canción de ese tipo que lleva más tiempo sin sonar  → musica.wav
   formula render NOMBRE     el vídeo final y su portada en videos/salida (--borrador: rápido, para ver el ritmo)
   formula portada NOMBRE    solo la portada: el gancho sobre un fotograma con los ojos abiertos
-  formula pruebas NOMBRE --hashtags "…"   4 copias de prueba, cada una distinta   → videos/salida/pruebas/
+  formula pruebas NOMBRE --hashtags "…"   5 copias de prueba, una al día; grabado en piezas, cada una otro vídeo
+                            (otro gancho y otro cuerpo)   → videos/salida/pruebas/
 
 Ver .claude/skills/edicion/SKILL.md.
 """
@@ -25,6 +27,7 @@ import corte  # noqa: E402
 import sonidos  # noqa: E402
 import musica  # noqa: E402
 import vlog as dia  # noqa: E402
+import piezas  # noqa: E402
 from config import AQUI, KIT, HF_DIR, TRABAJO, ENTRADA, SALIDA, FFMPEG, FFPROBE  # noqa: E402
 
 HF = HF_DIR / "node_modules" / ".bin" / "hyperframes"
@@ -152,12 +155,21 @@ def preparar(args):
             sys.exit("No se ha detectado voz.")
         crudo.write_text(json.dumps(palabras, ensure_ascii=False), encoding="utf-8")
 
-    palabras, repetidas = corte.quitar_repetidas(corte.juntar_cifras(json.loads(crudo.read_text(encoding="utf-8"))))
-    if repetidas:
-        print(f"   {repetidas} palabras de tomas repetidas fuera (me quedo con la última)")
-    palabras, quitadas = corte.quitar_fallos(palabras)
-    for q in quitadas:   # «corta eso», arranques cortados y frases dichas otra vez: se leen, por si sobra alguno
-        print(f"   fuera: «{q}»")
+    palabras = corte.juntar_cifras(json.loads(crudo.read_text(encoding="utf-8")))
+    # crudo.txt: todo lo que dijiste, sin quitar nada, con el número de cada palabra (para --piezas)
+    (dir_ / "crudo.txt").write_text(frases_de([{**p, "n": n} for n, p in enumerate(palabras)]), encoding="utf-8")
+    # En piezas, las tomas repetidas se buscan dentro de cada una: el gancho B o el cuerpo 2 dicen lo mismo que el A
+    # o el 1 con otras palabras, y si no quitar_repetidas se quedaría solo con el último
+    trozos = piezas.trocear(palabras, piezas.leer(args.piezas)).values() if args.piezas else [palabras]
+    palabras = []
+    for trozo in trozos:
+        trozo, repetidas = corte.quitar_repetidas(trozo)
+        if repetidas:
+            print(f"   {repetidas} palabras de tomas repetidas fuera (me quedo con la última)")
+        trozo, quitadas = corte.quitar_fallos(trozo)
+        for q in quitadas:   # «corta eso», arranques cortados y frases dichas otra vez: se leen, por si sobra alguno
+            print(f"   fuera: «{q}»")
+        palabras += trozo
     for n, p in enumerate(palabras):
         p["n"] = n
     fuera = set()   # tomas que sobran: «57» = la frase que empieza en la palabra 57; «83-91» = esas palabras
@@ -175,6 +187,8 @@ def preparar(args):
                 p["t"] = bien
             elif clave == limpia(mal):
                 p["t"] = re.sub(r"[\wáéíóúñüÁÉÍÓÚÑÜ]+", bien, p["t"], count=1)
+    if args.piezas:
+        return piezas.montar(sys.modules[__name__], dir_, unido, palabras, args)
 
     print("3/4 Quitando silencios y muletillas…")
     dur = duracion_de(unido)
@@ -595,6 +609,8 @@ def variables_de_marca():
 def construir(nombre):
     """Escribe index.html a partir del guion. Lo llaman armar, foto y render: nunca va atrasado."""
     dir_ = carpeta(nombre)
+    if (dir_ / "guion-piezas.html").exists():   # grabado en piezas: el guion.html de cada combinación sale de ahí
+        piezas.escribir_guiones(dir_)
     guion = (dir_ / "guion.html").read_text(encoding="utf-8") if (dir_ / "guion.html").exists() else ""
     medidas = json.loads((dir_ / "medidas.json").read_text())
     aj = leer_ajustes(guion, medidas["velo"])
@@ -1023,23 +1039,20 @@ GANCHOS_TRIAL_CLIP = {
 }
 
 
-# 4 pruebas al día a horas fijas. Medido sobre 52 pruebas: 9 copias al día del mismo vídeo bajaron la prueba típica
-# de unas 3.400 vistas a 190 en una semana (algunas a 0), y por franja la media mañana (11-13 h) fue la mejor y la
-# tarde (~17:45) la peor. Mantén las mismas horas unas dos semanas, vuelve a medir y mueve la peor.
-HORAS_DE_PRUEBA = ["11:00", "13:00", "16:00", "21:00"]
+# Una prueba al día, a la primera de estas horas que tengas libre. Medido sobre 52 pruebas: 9 copias al día del mismo
+# vídeo bajaron la prueba típica de unas 3.400 vistas a 190 en una semana (algunas a 0), y por franja la media mañana
+# (11-13 h) fue la mejor y la tarde (~17:45) la peor. Mantén las mismas horas unas dos semanas, mide y mueve la peor.
+HORAS_DE_PRUEBA = ["11:00", "13:00", "16:00", "19:00", "21:00"]
 
 
-def horas_de_prueba(n, dia=None):
-    """Las primeras n de HORAS_DE_PRUEBA. Si el día es hoy, solo las que quedan dentro de 15 minutos o más."""
+def dias_de_prueba(n, dia=None):
+    """Una prueba al día, n días seguidos desde `dia` (por defecto, mañana), a la primera de HORAS_DE_PRUEBA. Varias
+    copias del mismo vídeo el mismo día se quedan en 0 visualizaciones, y eso puede costarte alcance."""
     import datetime as dt
     from zoneinfo import ZoneInfo
     ahora = dt.datetime.now(ZoneInfo(config.marca()["zona_horaria"]))
-    dia = dia or (ahora + dt.timedelta(days=1)).strftime("%Y-%m-%d")
-    desde = ahora.hour * 60 + ahora.minute + 15 if dia == ahora.strftime("%Y-%m-%d") else 0
-    libres = [h for h in HORAS_DE_PRUEBA if int(h[:2]) * 60 + int(h[3:]) >= desde]
-    if n > len(libres):
-        sys.exit(f"Ese día quedan {len(libres)} horas de prueba y son {n} copias: otro día (--dia), o menos copias")
-    return dia, libres[:n]
+    primero = dt.date.fromisoformat(dia) if dia else (ahora + dt.timedelta(days=1)).date()
+    return [((primero + dt.timedelta(days=k)).isoformat(), HORAS_DE_PRUEBA[0]) for k in range(n)]
 
 
 # El gancho a la vista del vídeo (el de solo-portada no sale en el vídeo). Cada copia lleva otro titular, que tú
@@ -1072,10 +1085,18 @@ def pruebas(args):
     if not 5 <= len(tags) <= 10 or not all(re.fullmatch(r"#[\w]+", t) for t in tags):
         sys.exit('--hashtags: de 5 a 10, del tema del vídeo y sin los de alcance (#viral, #fyp): "#claudeai #ia …"')
     texto = pie.read_text(encoding="utf-8").strip()
+    # Grabado en piezas (piezas.py): cada copia es otra combinación de gancho y cuerpo, con el titular de su gancho
+    if (dir_ / "guion-piezas.html").exists():
+        piezas.escribir_guiones(dir_)
+    medidas = json.loads((dir_ / "medidas.json").read_text())
+    combos = medidas.get("combos", ["A1"])
+    orden = piezas.orden_pruebas(combos, args.desde + args.n)
     guion = (dir_ / "guion.html").read_text(encoding="utf-8")
     titulares = [None] * (args.desde + args.n)
     fichero_ganchos = dir_ / "ganchos-prueba.txt"
-    if admite_titular(guion):
+    if len(combos) > 1 and not fichero_ganchos.exists():
+        print(f"  grabado en piezas: las copias son {', '.join(orden[args.desde:])}, cada una con su gancho", flush=True)
+    elif admite_titular(guion):
         if not fichero_ganchos.exists():
             sys.exit(f"Falta {fichero_ganchos}: un titular por copia, una línea cada uno («/» parte la línea), "
                      "aprobados antes (ver .claude/skills/pruebas/SKILL.md)")
@@ -1090,25 +1111,39 @@ def pruebas(args):
                        "clip": (SUBS_TRIAL, GANCHOS_TRIAL_CLIP)}.get(estilo, (SUBS_TRIAL, GANCHOS_TRIAL))
     destino = SALIDA / "pruebas"
     destino.mkdir(exist_ok=True)
-    dur, hechas = duracion_de(original), []
+    hechas = []
     for i in range(args.desde, args.desde + args.n):
         # +1: la combinación 0 sería la del original (la primera copia solo cambiaría el color)
         sub_, gancho = list(subs_)[(i + 1) % 5], list(ganchos_)[(i + 1) % 4]
         color, vel, baja = list(COLORES)[i % 7], VELOCIDADES[i % 8], BAJA_TRIAL[i % 3]
-        copia = f"{args.nombre}/_prueba-{i}"
+        copia, combo = f"{args.nombre}/_prueba-{i}", orden[i]
+        origen, cual = piezas.carpeta_de(dir_, combo, combos), f" ({combo})" if len(combos) > 1 else ""
         shutil.rmtree(carpeta(copia), ignore_errors=True)
         carpeta(copia).mkdir()
         for f in dir_.iterdir():   # lo que el guion pueda nombrar (base, capturas, música), enlazado y no copiado
-            if f.name not in ("guion.html", "index.html", "sonidos.wav", "kit", "render.mp4") and not f.name.startswith("_"):
-                (carpeta(copia) / f.name).symlink_to(f)
+            if f.name not in ("guion.html", "guion-piezas.html", "index.html", "sonidos.wav", "kit", "render.mp4") and not f.name.startswith("_"):
+                (carpeta(copia) / f.name).symlink_to(origen / f.name if f.name in ("base.mp4", "palabras.json", "medidas.json") else f)
+        if origen != dir_ and medidas.get("musica"):   # la canción, cortada al largo de esta combinación
+            (carpeta(copia) / "musica.wav").unlink(missing_ok=True)
+            musica.recortar(carpeta(copia), medidas["musica"])
+        espejo = i % 2 == 1   # las impares, con tu cámara en espejo: otro vídeo más para Instagram
+        for f in ("base.mp4", "reaccion.mp4") if espejo else ():   # solo tu cámara: el clip de otro, los gráficos y el texto, al derecho
+            if (enlace := carpeta(copia) / f).exists():
+                fuente = enlace.resolve()
+                enlace.unlink()
+                subprocess.run([FFMPEG, "-v", "error", "-y", "-i", str(fuente), "-vf", "hflip", "-c:v", "libx264",
+                                "-preset", "veryfast", "-crf", "16", "-g", "30", "-keyint_min", "30", "-pix_fmt", "yuv420p",
+                                "-c:a", "copy", str(enlace)], check=True)
         sub_css = f"#root .costura:not(.clave) {{ {subs_[sub_]} }}" if partida_ else f"#root .sub {{ {subs_[sub_]} margin-top:{baja}px; }}"
         retoque = (f"<style>\n{sub_css}\n#root .gancho {{ {ganchos_[gancho]} margin-top:{0 if estilo == 'clip' else baja}px; }}"
                    "\n</style>\n")
-        (carpeta(copia) / "guion.html").write_text(con_gancho(guion, titulares[i]) + "\n" + retoque, encoding="utf-8")
+        (carpeta(copia) / "guion.html").write_text(con_gancho((origen / "guion.html").read_text(encoding="utf-8"), titulares[i])
+                                                   + "\n" + retoque, encoding="utf-8")
         construir(copia)
         crudo = carpeta(copia) / "render.mp4"
         subprocess.run([str(HF), "render", str(carpeta(copia)), "-o", str(crudo), "--fps", "30", "--quality", "delivery"],
                        env=ENTORNO, check=True, capture_output=True)
+        largo = duracion_de(crudo)
         final = destino / f"{args.nombre}-prueba-{i}.mp4"
         # Fichero nuevo y sin los datos del original; 10 Mb/s como para_instagram
         subprocess.run([FFMPEG, "-v", "error", "-y", "-i", str(crudo), "-vf", f"setpts=PTS/{vel},{COLORES[color]}",
@@ -1119,11 +1154,12 @@ def pruebas(args):
         k = i % len(tags)
         (destino / f"{args.nombre}-prueba-{i}.pie.txt").write_text(
             f"{texto}\n\n{' '.join((tags[k:] + tags[:k])[:5])}\n", encoding="utf-8")
-        if abs(duracion_de(final) - dur / vel) > 0.3:   # dura lo que toca a su velocidad
-            sys.exit(f"{final.name} dura {duracion_de(final):.1f} s y a {vel}× tendría que durar {dur / vel:.1f}")
+        if abs(duracion_de(final) - largo / vel) > 0.3:   # dura lo que toca a su velocidad
+            sys.exit(f"{final.name} dura {duracion_de(final):.1f} s y a {vel}× tendría que durar {largo / vel:.1f}")
         shutil.rmtree(carpeta(copia))
         hechas.append(final)
-        print(f"  {final.name}: «{titulares[i] or 'su gráfico de arranque'}», {vel}×, {color}, subtítulos «{sub_}», gancho «{gancho}», {baja} px más abajo", flush=True)
+        print(f"  {final.name}{cual}: «{titulares[i] or 'su gancho'}», {vel}×, {color}, subtítulos «{sub_}», gancho «{gancho}», "
+              f"{baja} px más abajo{', en espejo' if espejo else ''}", flush=True)
     # La hoja para mirarlas: el gancho (1 s) y un subtítulo (la mitad) de cada una, en dos filas
     hoja = destino / f"{args.nombre}-pruebas.jpg"
     entradas = []
@@ -1136,11 +1172,12 @@ def pruebas(args):
     filas += "".join(f"[v{j}]" for j in range(n, 2 * n)) + (f"hstack=inputs={n}[b];" if n > 1 else "null[b];")
     subprocess.run([FFMPEG, "-v", "error", "-y", *entradas, "-filter_complex", escala + filas + "[a][b]vstack",
                     "-frames:v", "1", "-q:v", "3", str(hoja)], check=True)
-    dia, horas = horas_de_prueba(args.desde + args.n, args.dia)
+    cuando = dias_de_prueba(args.desde + args.n, args.dia)
     horario = destino / f"{args.nombre}-pruebas-horario.txt"
-    lineas = [f"{args.nombre}-prueba-{i}.mp4  {dia} {horas[i]}" for i in range(args.desde, args.desde + args.n)]
+    lineas = [f"{args.nombre}-prueba-{i}.mp4  {cuando[i][0]} {cuando[i][1]}" + (f"  ({orden[i]})" if len(combos) > 1 else "")
+              for i in range(args.desde, args.desde + args.n)]
     horario.write_text("\n".join(lineas) + "\n", encoding="utf-8")
-    print(f"\n  {n} copias en {destino}\n  hoja: {hoja}\n\nCuándo sale cada una (Reel de prueba, en manual):")
+    print(f"\n  {n} copias en {destino}\n  hoja: {hoja}\n\nCuándo sale cada una (Reel de prueba, en manual; una al día):")
     print("\n".join("  " + l for l in lineas))
     print(f"  → {horario}")
 
@@ -1177,6 +1214,8 @@ def main():
                    help="pausa más larga que se deja dentro de una frase (s); 0.25 deja las comas, 0.12 lo aprieta todo")
     p.add_argument("--cambia", help='palabras mal oídas: "Cloud=Claude;Notión=Notion". Una sola, por su número: "#185=programación."')
     p.add_argument("--tono", default="cálido", choices=list(corte.TONOS))
+    p.add_argument("--piezas", help='grabado en piezas (piezas.py): "A=0,B=31,C=58,1=90,cierre=301,2=340", '
+                   "la palabra de crudo.txt en que empieza cada una")
     p.set_defaults(f=preparar)
     p = sub.add_parser("vlog")
     p.add_argument("nombre")
@@ -1240,9 +1279,9 @@ def main():
     p = sub.add_parser("pruebas")
     p.add_argument("nombre")
     p.add_argument("--hashtags", required=True, help="de 5 a 10, del tema: cada copia lleva 5, en otro orden")
-    p.add_argument("--n", type=int, default=4, help="cuántas copias (4, una por hora de prueba)")
+    p.add_argument("--n", type=int, default=5, help="cuántas copias (5, una al día: 3 ganchos × 2 cuerpos, menos el normal)")
     p.add_argument("--desde", type=int, default=0, help="la primera combinación: para seguir una tanda cortada")
-    p.add_argument("--dia", help="el día en que salen, AAAA-MM-DD (por defecto, mañana)")
+    p.add_argument("--dia", help="el día de la primera, AAAA-MM-DD (por defecto, mañana); las demás, un día cada una")
     p.set_defaults(f=pruebas)
     for nombre, f in (("armar", armar), ("render", render), ("foto", foto), ("portada", portada)):
         p = sub.add_parser(nombre)

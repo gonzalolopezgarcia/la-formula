@@ -128,16 +128,32 @@ def poner(dir_, tipo=None, cancion=None, entra=0.0):
         if not candidatas:
             raise SystemExit(f"No tienes canciones de tipo «{tipo}» en marca/musica.json")
         c = min(candidatas, key=lambda c: vistas.get(c["id"], ("",))[0])
+    desde = ajustar(dir_, c, tipo, entra)
+    SONADAS.parent.mkdir(parents=True, exist_ok=True)
+    with SONADAS.open("a", encoding="utf-8") as f:
+        f.write(f"{time.strftime('%Y-%m-%d %H:%M')}\t{c['id']}\t{dir_.name}\n")
+    medidas = json.loads((dir_ / "medidas.json").read_text())   # para cortarla otra vez a otro largo (recortar)
+    medidas["musica"] = {"cancion": c["id"], "tipo": tipo, "entra": entra}
+    (dir_ / "medidas.json").write_text(json.dumps(medidas))
+    print(f"{c['titulo']}, {c['artista']} (desde el {desde:g} s) → musica.wav\nEn la línea de ajustes del guion: musica=musica.wav")
+
+
+def recortar(dir_, eleccion):
+    """La misma canción que eligió poner, desde el mismo sitio y al mismo volumen, al largo del vídeo de dir_:
+    las combinaciones de un reel grabado en piezas (piezas.py) no duran lo mismo que el reel."""
+    c = next(c for c in catalogo()["canciones"] if c["id"] == eleccion["cancion"])
+    ajustar(dir_, c, eleccion["tipo"], eleccion["entra"])
+
+
+def ajustar(dir_, c, tipo, entra):
+    """musica.wav del largo del vídeo de dir_, y que se oiga. Devuelve el segundo de la canción desde el que suena."""
     medidas = json.loads((dir_ / "medidas.json").read_text())
     dur = medidas["duracion"] + medidas.get("clip", 0.0)
     musica = dir_ / "musica.wav"
     desde = cortar(c, dur, musica, entra, tipo)
     if (falta := objetivo_de(tipo or c["tipos"][0]) - 2 - lufs(musica, movil=True)) > 1:   # una de graves: que se oiga en el móvil
         igualar(musica, objetivo_de(tipo or c["tipos"][0]) - 2 - max(0, falta - 8), movil=True)
-    SONADAS.parent.mkdir(parents=True, exist_ok=True)
-    with SONADAS.open("a", encoding="utf-8") as f:
-        f.write(f"{time.strftime('%Y-%m-%d %H:%M')}\t{c['id']}\t{dir_.name}\n")
-    print(f"{c['titulo']}, {c['artista']} (desde el {desde:g} s) → musica.wav\nEn la línea de ajustes del guion: musica=musica.wav")
+    return desde
 
 
 def opciones(dir_, ids, tipo="utilidad"):

@@ -55,7 +55,26 @@ Cada vídeo vive en `videos/trabajo/<nombre>/` (nombre: `AAAA-MM-DD-tema`). El l
    herramientas/formula preparar <nombre> --clips <carpeta> --pista "Claude, Notion"
    ```
    `--pista`: los nombres propios que dice, para que Whisper los escriba bien. Deja `base.mp4` (cortado, sin
-   texto), `frases.txt` (cada palabra con su segundo: de aquí salen todos los tiempos) y `palabras.txt`.
+   texto), `frases.txt` (cada palabra con su segundo: de aquí salen todos los tiempos), `palabras.txt` y
+   `crudo.txt` (todo lo que dijo, sin quitar nada, con el número de cada palabra).
+   - 🚨 **Grabado en piezas** (el guion de /guion trae tres ganchos y un `cuerpo2`, o grabó más de un gancho): lo
+     normal son **tres clips**: el 1 con los tres ganchos (cada uno con su frase 2), el 2 con el cuerpo 1 y el
+     cierre, y el 3 con el cuerpo 2. Lee `crudo.txt` y pasa `preparar` otra vez diciendo dónde empieza cada pieza
+     (no transcribe otra vez):
+     ```bash
+     herramientas/formula preparar <nombre> --piezas "A=0,B=31,C=58,1=90,cierre=301,2=340"
+     ```
+     **A**, **B** y **C** son los tres ganchos (A, el del reel normal), **1** y **2** los dos cuerpos y **cierre** la
+     conclusión, lo que mandas y el «comenta X», grabado una vez. El número es el de la palabra de `crudo.txt` en que
+     empieza cada pieza. Las tomas repetidas se quitan dentro de cada pieza, nunca de una a otra.
+   - Salen hasta **seis vídeos**: la carpeta es **A1**, el reel normal; cada otra combinación va en `_combo-B1/`,
+     `_combo-C1/`, `_combo-A2/`… Las otras cinco son sus pruebas (/pruebas), una al día. `piezas.txt` trae todas las
+     piezas seguidas (A, B, C, 1, 2, cierre) con los segundos que usa el guion.
+   - 🚨 **El guion es `guion-piezas.html`, nunca `guion.html`**: se escribe una vez, sobre los segundos de
+     `piezas.txt`, con todo lo que lleva tiempo dentro de su pieza (`<!-- pieza B -->` … `<!-- /pieza -->`): el
+     titular y los gráficos del gancho B también. Los estilos y la línea de ajustes van fuera. `armar`, `foto` y
+     `render` escriben de ahí el `guion.html` de cada combinación, cada una con sus segundos.
+   - La música, la portada, el borrador y el visto bueno son los del A1, como siempre.
 3. **Lee `frases.txt` entero**:
    - **¿Cierra la idea?** Antes del «comenta X» o del «sígueme» tiene que decir una conclusión o algo que hacer
      que conteste al gancho. Si no lo dice, **díselo antes de montar**, con la frase propuesta para grabarla

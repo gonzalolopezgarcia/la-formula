@@ -1,13 +1,14 @@
 # La Fórmula
 
-Tu equipo de agentes de IA para hacer reels, en tu ordenador y con Claude:
+Tu equipo de agentes de IA para hacer reels, en tu ordenador y con Claude. De una grabación de 5 a 10 minutos salen
+seis vídeos: el reel normal y cinco de prueba, uno al día.
 
 | Agente | Qué hace |
 |---|---|
-| **/guion** | Te escribe el guion: desde un tema, inspirándose en lo que mejor les funciona a tus referentes, o copiando un vídeo (aunque esté en otro idioma). Ganchos que paran, frases cortas, cada cifra comprobada |
-| **/edicion** | Edita tus clips: quita silencios y tomas repetidas, y pone encima gráficos animados que prueban lo que dices, subtítulos, música y efectos de sonido. Cuatro estilos: gráficos encima, pantalla partida, clip y reacción, y vlog |
+| **/guion** | Te escribe el guion: desde un tema, inspirándose en un vídeo que te guste o en lo que mejor les funciona a tus referentes, o copiando un vídeo (aunque esté en otro idioma). Tres ganchos y dos cuerpos con el mismo mensaje dicho de otra forma, frases cortas, cada cifra comprobada |
+| **/edicion** | Edita tus clips: quita silencios y tomas repetidas, y pone encima gráficos animados que prueban lo que dices, subtítulos, música y efectos de sonido. De los tres ganchos y los dos cuerpos monta las seis combinaciones. Cuatro estilos: gráficos encima, pantalla partida, clip y reacción, y vlog |
 | **/subida** | Lo programa en Instagram, TikTok y Facebook a la vez, a tu hora buena, desde tu propio Chrome |
-| **/pruebas** | Al día siguiente, 4 copias, cada una con otro titular, como «Reels de prueba»: solo las ve quien no te sigue |
+| **/pruebas** | Las otras cinco combinaciones como «Reels de prueba», una al día durante cinco días: solo las ve quien no te sigue |
 
 Todo corre en tu ordenador: la transcripción (Whisper), el corte (ffmpeg) y el render (HyperFrames). Lo único que
 pagas es tu plan de Claude.
@@ -34,10 +35,12 @@ Y dentro de Claude: **/empezar**. Instala las herramientas y te hace unas pregun
 
 Después, la cadena:
 
-1. **/guion** «hazme el guion de …» → te da las tomas numeradas. Grábalas con tus palabras.
-2. Pasa los clips a `videos/entrada/` y **/edicion** → te enseña un borrador; corriges lo que quieras.
+1. **/guion** «hazme el guion de …» (o pégale un vídeo que te guste) → te da tres ganchos, las tomas y un cuerpo 2.
+   Grábalos con tus palabras en tres clips: los tres ganchos, el cuerpo 1 con el cierre y el cuerpo 2.
+2. Pasa los clips a `videos/entrada/` y **/edicion** → te enseña el borrador del reel normal (gancho 1 + cuerpo 1);
+   corriges lo que quieras.
 3. **/subida** «súbelo por la tarde» → Instagram, TikTok y Facebook a la vez.
-4. **/pruebas** → las 4 copias de prueba para el día siguiente (11:00, 13:00, 16:00 y 21:00).
+4. **/pruebas** → las otras cinco combinaciones, una al día durante los cinco días siguientes.
 
 ## Qué hay dentro
 

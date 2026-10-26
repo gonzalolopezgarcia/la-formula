@@ -48,7 +48,7 @@ Si el vídeo acaba en «comenta X», el documento que recibe quien comenta se es
 - La hora real con `date`, en su zona (`marca/marca.json`).
 - 🚨 **No le preguntes a qué hora: propónsela, con el motivo**, y que diga sí u otra. Una línea, por ejemplo: «Lo
   programo hoy a las 19:30, media hora antes de tu pico de las 20:00, en Instagram, TikTok y Facebook a la vez; y
-  mañana las 4 pruebas a las 11:00, 13:00, 16:00 y 21:00».
+  desde mañana las 5 pruebas, una al día a las 11:00».
 
 **Cómo se elige la hora**, por orden:
 
@@ -83,7 +83,7 @@ Si el vídeo acaba en «comenta X», el documento que recibe quien comenta se es
 ## 3. El orden: Instagram → la respuesta automática → TikTok → Facebook → pruebas
 
 Instagram primero: la automatización del «comenta X» va atada a la publicación, y los primeros comentarios son los
-que más gente ve. Luego TikTok y Facebook a la misma hora, y al día siguiente las copias de prueba (/pruebas).
+que más gente ve. Luego TikTok y Facebook a la misma hora, y desde el día siguiente las copias de prueba (/pruebas), una al día.
 
 ## 4. Instagram y Facebook: Meta Business Suite
 

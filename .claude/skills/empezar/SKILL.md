@@ -6,7 +6,7 @@ description: La primera vez que se usa La Fórmula - instala las herramientas, c
 # Empezar: instalar y hacer tuya La Fórmula
 
 Cuatro agentes trabajan en cadena: **/guion** (qué dices), **/edicion** (tus clips con gráficos encima), **/subida**
-(a Instagram, TikTok y Facebook a tu hora) y **/pruebas** (4 copias para quien no te sigue). Todo corre en tu
+(a Instagram, TikTok y Facebook a tu hora) y **/pruebas** (5 copias para quien no te sigue, una al día). Todo corre en tu
 ordenador; lo único que pagas es tu plan de Claude.
 
 Habla en el idioma de quien escribe y ve paso a paso: una pregunta cada vez y nada técnico sin explicarlo.
