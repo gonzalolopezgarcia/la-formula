@@ -6,9 +6,9 @@ seis vídeos: el reel normal y cinco de prueba, uno al día.
 | Agente | Qué hace |
 |---|---|
 | **/guion** | Te escribe el guion: desde un tema, inspirándose en un vídeo que te guste o en lo que mejor les funciona a tus referentes, o copiando un vídeo (aunque esté en otro idioma). Tres ganchos y dos cuerpos con el mismo mensaje dicho de otra forma, frases cortas, cada cifra comprobada |
-| **/edicion** | Edita tus clips: quita silencios y tomas repetidas, y pone encima gráficos animados que prueban lo que dices, subtítulos, música y efectos de sonido. De los tres ganchos y los dos cuerpos monta las seis combinaciones. Cuatro estilos: gráficos encima, pantalla partida, clip y reacción, y vlog |
-| **/subida** | Lo programa en Instagram, TikTok y Facebook a la vez, a tu hora buena, desde tu propio Chrome |
-| **/pruebas** | Las otras cinco combinaciones como «Reels de prueba», una al día durante cinco días: solo las ve quien no te sigue |
+| **/edicion** | Edita tus clips: quita silencios y tomas repetidas, y pone encima gráficos animados que prueban lo que dices, subtítulos, música y efectos de sonido. De los tres ganchos y los dos cuerpos monta las seis combinaciones. Cuatro estilos (gráficos encima, pantalla partida, clip y reacción, y vlog): elige el que pega con lo que pides, o se basa en el reel de un creador que te guste y lo hace con tus colores |
+| **/subida** | Lo programa en Instagram, TikTok y Facebook, a la hora en que tu gente se conecta (la mira en tus estadísticas), desde tu propio Chrome y a ritmo de persona |
+| **/pruebas** | Cinco «Reels de prueba», una al día durante cinco días: solo las ve quien no te sigue. Cada una es otro vídeo: otro gancho con otro cuerpo, o con un recorte del cuerpo (o la lista en otro orden) si grabaste uno solo, y dos en espejo |
 
 Todo corre en tu ordenador: la transcripción (Whisper), el corte (ffmpeg) y el render (HyperFrames). Lo único que
 pagas es tu plan de Claude.

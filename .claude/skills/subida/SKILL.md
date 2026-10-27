@@ -12,6 +12,19 @@ falta ninguna API ni cuenta de desarrollador. Lee `marca/marca.json` (cuentas, h
 🚨 **Publicar es tuyo**: se deja todo rellenado y se pulsa «Programar» o «Publicar» solo con su sí a ESE vídeo, a esa
 hora. Nunca escribas su contraseña: si una web pide entrar, que entre él.
 
+🚨 **Meta vigila lo automático, y avisa tarde.** A una cuenta le saltó «Sospechamos que hay comportamientos
+automatizados en tu cuenta» después de programar unos 25 reels en pocos días desde su Chrome y de leer las vistas de
+61 vídeos seguidos. Para que no le pase:
+
+- **A ritmo de persona**: un vídeo detrás de otro, en una sola pestaña, con pausas de segundos entre clics. Nunca
+  varias subidas a la vez.
+- **Poco por día**: el reel de hoy y, como mucho, la tanda de sus pruebas. Si quiere programar la semana entera,
+  repártelo en varios días.
+- **Leer, lo justo**: sus estadísticas una vez para elegir la hora (se apuntan y no se vuelven a leer cada vez);
+  nunca las direcciones internas de Instagram (`/api/…`) ni recorrer decenas de perfiles seguidos.
+- **Si sale ese aviso o un captcha, para todo lo de Meta en su Chrome**: que lo cierre él, y desde entonces se le deja
+  todo listo (vídeo, portada, pie y hora) y lo sube él a mano. Apúntalo en `marca/subida.md`.
+
 ## Lo que le vas contando
 
 Una o dos líneas por paso. Por ejemplo:
@@ -23,8 +36,8 @@ Una o dos líneas por paso. Por ejemplo:
 - «Lo dejo listo en Meta Business Suite con tu portada buena (no la que elige Instagram, que suele salir a medio
   parpadeo) y el pie. Dime "dale" y lo programo.»
 - «Programado en Instagram y Facebook para las 19:30. Ahora TikTok, a la misma hora, con su pie.»
-- Al acabar: «Listo en las 3 redes a las 19:30. Mañana te hago las 9 pruebas para quien no te sigue: 08:00, 09:40,
-  11:15, 12:55, 14:30, 16:10, 17:45, 19:25 y 21:00. ¿Las preparo esta noche?» (/pruebas)
+- Al acabar: «Listo en las 3 redes a las 19:30. Ahora las 5 pruebas para quien no te sigue, una al día desde mañana a
+  las 11:00, cada una con otro gancho. ¿Las preparo esta noche?» (/pruebas)
 
 ## 0. Lo que se manda, a la vez que su visto bueno
 
@@ -71,6 +84,9 @@ Si el vídeo acaba en «comenta X», el documento que recibe quien comenta se es
 - **Nunca dos publicaciones a menos de una hora** en la misma red: mira lo que ya tiene programado (incluidas sus
   pruebas) y, si choca, propón la siguiente hora libre.
 - Fin de semana: su gente suele conectarse más tarde; mira su gráfica de «Momentos de más actividad» de ese día.
+- **Cada red, su pico**: si el de TikTok cae dos horas o más lejos del de Instagram, TikTok va a su hora (30 min antes
+  de su pico) y díselo en la misma línea: «Instagram y Facebook a las 19:30; TikTok a las 21:30, que tu gente de TikTok
+  entra más tarde».
 - TikTok solo deja programar entre 15 minutos y 10 días por delante.
 
 ## 2. El pie de cada red
@@ -130,5 +146,5 @@ adáptalos y apúntalo en `marca/subida.md`.
 - Cierra las pestañas que abriste.
 - Contesta en dos líneas: qué vídeo, a qué hora y en qué redes; y, si pide «comenta X», que en TikTok esos
   comentarios los contesta él.
-- Si es un vídeo normal suyo (no un clip de otro), ofrécele las copias de prueba de mañana con sus horas
-  (/pruebas): «Mañana, 9 pruebas a las 08:00, 09:40, 11:15, 12:55, 14:30, 16:10, 17:45, 19:25 y 21:00».
+- Si es un vídeo normal suyo (no un clip de otro), ofrécele las copias de prueba con sus días y su hora
+  (/pruebas): «Desde mañana, 5 pruebas, una al día a las 11:00, cada una con otro gancho».
