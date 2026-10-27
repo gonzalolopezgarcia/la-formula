@@ -1,6 +1,6 @@
 ---
 name: edicion
-description: Edita un reel a partir de tus clips hablando a cámara, con gráficos animados encima que prueban lo que dices, subtítulos, música y efectos de sonido, todo en tu ordenador y gratis. Cuatro estilos - «encima» (tú a pantalla entera y el gráfico arriba), «partida» (pantalla partida, el gráfico en un panel), «clip» (el clip de otro arriba y tú reaccionando) y «vlog» (un día de tu vida con tu voz encima). Úsala cuando digas «edítame el vídeo», «edita estos clips», «hazme el reel», «el vídeo de hoy», «edítalo estilo partida», «haz el vlog», o pases unos clips. Corta silencios y tomas repetidas, escribe el guion visual sobre lo que dijiste de verdad, lo revisa fotograma a fotograma y te enseña un borrador antes del final. No escribe el guion hablado (/guion) ni lo sube (/subida).
+description: Edita un reel a partir de tus clips hablando a cámara, con gráficos animados encima que prueban lo que dices, subtítulos, música y efectos de sonido, todo en tu ordenador y gratis. Cuatro estilos - «encima» (tú a pantalla entera y el gráfico arriba), «partida» (pantalla partida, el gráfico en un panel), «clip» (el clip de otro arriba y tú reaccionando) y «vlog» (un día de tu vida con tu voz encima), más los que crees tú: elige el estilo por lo que pides y te enseña el menú solo si lo preguntas; «edítalo como @cuenta» desmonta un reel de ese creador y lo hace con tus colores. Úsala cuando digas «edítame el vídeo», «edita estos clips», «hazme el reel», «el vídeo de hoy», «edítalo estilo partida», «qué estilos de edición tienes», «edítalo como este reel», «haz el vlog», o pases unos clips. Corta silencios y tomas repetidas, escribe el guion visual sobre lo que dijiste de verdad, lo revisa fotograma a fotograma y te enseña un borrador antes del final. No escribe el guion hablado (/guion) ni lo sube (/subida).
 ---
 
 # Edición: tus clips, con gráficos que prueban lo que dices
@@ -19,7 +19,8 @@ Una o dos líneas por paso, con los números de verdad. Por ejemplo:
 
 - «Junto tus 12 clips y los transcribo en tu ordenador, sin mandar nada fuera.» → «Listo: 2:27 de brutos.»
 - «Te he quitado los silencios, 3 tomas repetidas y 2 frases cortadas: de 2:27 a 1:18. Lo que has dicho está entero.»
-- «Leyendo lo que dices: cierras bien la idea antes del "comenta". Te propongo el estilo de gráficos encima.»
+- «Leyendo lo que dices: cierras bien la idea antes del "comenta". Lo edito con gráficos encima, que es un tutorial
+  corto; si lo quieres a pantalla partida, dímelo.»
 - «He escrito 19 bloques, uno cada 3 s: tus seguidores girando de 879 a 3.787, tu gráfica, tus 4 reels con más vistas…»
 - «La canción: Cinematic Pulse, por debajo de tu voz y nivelada para que se oiga igual en el móvil.»
 - «27 efectos de sonido, uno en cada remate y ninguno al entrar un bloque, como los editores que funcionan.»
@@ -28,16 +29,29 @@ Una o dos líneas por paso, con los números de verdad. Por ejemplo:
   portada, con el fotograma donde tienes los ojos más abiertos.»
 - Al acabar: «Perfecto. Te sugiero subirlo hoy a las 19:30, media hora antes de tu pico: ¿lo programo?» (/subida)
 
-## Primero: qué estilo
+## Primero: qué estilo (lo eliges tú, salvo que pregunte)
 
-Pregúntalo si no lo dice ni está en `marca/estilo.md`. Una línea por estilo:
+| Estilo | Cómo se ve | Para | Se pide así |
+|---|---|---|---|
+| `encima` | Tú a pantalla entera; el titular y el gráfico arriba, en cristal | Lo normal: un tutorial, un caso, una opinión | «con gráficos encima», «con animaciones», «el normal» |
+| `partida` | El gráfico en un panel claro arriba; tú abajo; la palabra clave grande en la costura | Tutoriales con muchos pasos, cosas que necesitan sitio | «pantalla partida», «mitad y mitad», «fondo blanco», «con pasos» |
+| `clip` | El clip de otro arriba (un CEO, un pódcast) traducido; tú abajo escuchando; luego tú a pantalla entera opinando | Reaccionar a lo que ha dicho alguien | «reacción», «el vídeo de X arriba y yo abajo» |
+| `vlog` | Los clips de tu día cortados cada 1,2 a 1,8 s, tu voz encima, una palabra cada vez | Un día de tu vida | «vlog», «un día en mi vida», «con mis clips del día» |
 
-| Estilo | Cómo se ve | Para |
-|---|---|---|
-| `encima` | Tú a pantalla entera; el titular y el gráfico arriba, en cristal | Lo normal: un tutorial, un caso, una opinión |
-| `partida` | El gráfico en un panel claro arriba; tú abajo; la palabra clave grande en la costura | Tutoriales con muchos pasos, cosas que necesitan sitio |
-| `clip` | El clip de otro arriba (un CEO, un pódcast) traducido; tú abajo escuchando; luego tú a pantalla entera opinando | Reaccionar a lo que ha dicho alguien |
-| `vlog` | Los clips de tu día cortados cada 1,2 a 1,8 s, tu voz encima, una palabra cada vez | Un día de tu vida |
+Más los que haya creado él, en `marca/estilo.md` → «Mis estilos». Por orden:
+
+1. **Pregunta qué estilos hay** («¿cómo me lo puedes editar?», «qué estilos tienes»): esta tabla tal cual, con los
+   suyos, y que elija. No empieces a editar hasta que conteste.
+2. **Nombra uno**, por su nombre o con una frase de «Se pide así» (o una que quiera decir lo mismo): ese.
+3. **No dice nada: lo eliges tú**, sin preguntar, por lo que pide y lo que hay. Clips de su día sin hablar a cámara →
+   `vlog`; un enlace o el vídeo de otro al que contesta → `clip`; un tutorial de 4 pasos o más, o algo que necesita
+   sitio (una web, una tabla) → `partida`; lo demás → su «Estilo por defecto» de `marca/estilo.md` o, sin él,
+   `encima`. Díselo en una línea y sigue: «Lo edito con gráficos encima, que es un tutorial corto. Si lo quieres a
+   pantalla partida, dímelo».
+4. **Pide «como @cuenta» o «como este reel»**: hazlo así, basándote en ese creador («Basarte en otros creadores»,
+   abajo), y al acabar pregúntale si lo guardas como un estilo suyo.
+5. **Pide un aspecto que ninguno tiene, sin referente** («con fondo negro», «más cinematográfico»): no estires el más
+   parecido en silencio. Dile cuál se acerca y qué le falta, y pídele un reel que lo tenga para basarte en él.
 
 ## Los pasos
 
@@ -70,6 +84,10 @@ Cada vídeo vive en `videos/trabajo/<nombre>/` (nombre: `AAAA-MM-DD-tema`). El l
    - Salen hasta **seis vídeos**: la carpeta es **A1**, el reel normal; cada otra combinación va en `_combo-B1/`,
      `_combo-C1/`, `_combo-A2/`… Las otras cinco son sus pruebas (/pruebas), una al día. `piezas.txt` trae todas las
      piezas seguidas (A, B, C, 1, 2, cierre) con los segundos que usa el guion.
+   - 🚨 **Tres ganchos y un solo cuerpo**: añade `--cuerpos` con un recorte rápido y uno exprés de sus frases (o, en
+     una lista sin numerar, otro orden de los puntos), para que las pruebas sean B1, C2, A3, B2, C3 y no el mismo
+     cuerpo cinco veces. Cómo se eligen los tramos: /pruebas, «Un solo cuerpo». Se escribe solo la pieza 1 del
+     guion: la de los otros cuerpos sale de ella.
    - 🚨 **El guion es `guion-piezas.html`, nunca `guion.html`**: se escribe una vez, sobre los segundos de
      `piezas.txt`, con todo lo que lleva tiempo dentro de su pieza (`<!-- pieza B -->` … `<!-- /pieza -->`): el
      titular y los gráficos del gancho B también. Los estilos y la línea de ajustes van fuera. `armar`, `foto` y
@@ -281,6 +299,38 @@ Los colores, las letras y las piezas son los suyos (marca.json): se copia el qu�
   hace). Antes de `preparar`, comprueba que sus clips cubren cada escena en ese orden; si falta una, díselo antes
   de montar, como una frase que falta.
 - **Su canción**, a su nivel bajo la voz: búscala, añádela con `musica --anadir` y apunta de qué reel sale.
+
+## Basarte en otros creadores
+
+Cuando pide «edítalo como @cuenta» o «como este reel», o cuando un estilo suyo nuevo nace de un referente. Se
+aprende **el qué y el cuándo, nunca el aspecto**: el ritmo, qué se enseña y en qué segundo, dónde va el texto, cómo
+cortan, qué suena. Sus colores, letras y adornos, no: se pinta todo con lo suyo (`marca.json`) y las piezas del kit.
+
+1. **El reel de referencia**: el enlace que te pase; si solo nombra la cuenta, el suyo más visto de los últimos
+   (`marca/referentes.md`, o su rejilla con `vistas-rejilla.js`). Bájalo sin usar su sesión:
+   `herramientas/.venv/bin/yt-dlp -q -o "videos/estudio/<código>/v.%(ext)s" --ffmpeg-location herramientas/.bin <url>`.
+2. **Desmóntalo**: hoja de fotogramas cada 0,5 s (`ffmpeg -i v.mp4 -vf "fps=2,scale=216:384,tile=6x4" hoja-%02d.jpg`)
+   y `herramientas/formula-estudiar videos/estudio` (lo que dice, con sus segundos). Apunta, con cifras:
+   - cada cuánto cambia lo de arriba y qué es (titular, gráfico, captura, B-roll, nada);
+   - dónde va el texto, cuántas palabras, y cómo son los subtítulos (tamaño, sitio, si saltan o están quietos);
+   - los cortes: cada cuántos segundos, si cambia el plano o hay zoom;
+   - qué suena y cuándo (efectos en qué momentos, la música: cuál y lo baja que va bajo la voz);
+   - qué hace en los 3 primeros segundos y cómo cierra.
+3. **Lo que se queda**: el estilo nuestro más cercano y, por cada cosa suya, cómo se hace con el kit (una tabla
+   «lo suyo → lo nuestro»). Lo que el kit no tiene se escribe en HTML dentro del bloque («Trampas del kit»).
+4. **Su canción**: si se inspira en un reel con música, prueba primero esa (búscala, `musica --anadir`, y apunta de qué
+   reel sale), a su nivel bajo la voz. Solo si puede usarla.
+5. 🚨 **La prueba antes de enseñarlo**: tapa su cara. Si ese fotograma podría ser del otro creador, falta lo suyo: su
+   acento en la palabra clave, sus letras, una pieza suya.
+
+**Un estilo suyo nuevo**, si quiere repetirlo (pregúntaselo al acabar ese vídeo):
+
+- Lo nombra él, con palabras de lo que se ve («con fondo negro», «el de las fotos»), nunca con el nombre del creador
+  ni de la herramienta.
+- En `marca/estilo.md` → «Mis estilos»: el nombre, cómo se ve, para qué, cómo lo pide, el reel del que sale, el
+  estilo de base (`estilo=`) y lo que cambia: la línea de ajustes y el `<style>` que va arriba de cada guion. Su
+  primer guion se guarda como `marca/estilos/<nombre>.html` y es la plantilla del siguiente.
+- Desde entonces sale en la tabla de arriba, como los demás.
 
 ## Si contesta un mensaje: llega como notificación
 
