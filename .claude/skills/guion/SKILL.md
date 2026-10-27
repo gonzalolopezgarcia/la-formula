@@ -47,7 +47,9 @@ Lo deciden sus palabras: no preguntes cuál. Un tema más «busca inspiración»
      cada una, su rejilla con `vistas-rejilla.js` (paso 2) y su mediana. Propón cinco en una tabla (cuenta,
      seguidores, mediana de vistas, qué hace bien) y, con su sí, a `referentes.md`.
    - Nunca cuentas de otro sector «por si acaso»: la inspiración vale si su público es como el suyo.
-1. Avísale de que vas a usar su Chrome (Claude in Chrome); todo es de lectura.
+1. Avísale de que vas a usar su Chrome (Claude in Chrome); todo es de lectura. A ritmo de persona: una cuenta cada
+   vez, en una pestaña, cinco como mucho por sesión (Meta marca lo automático: /subida). Lo que ya leíste esta semana
+   no se vuelve a leer.
 2. La rejilla de cada cuenta de `marca/referentes.md` en `instagram.com/<cuenta>/reels/`, pegando
    `herramientas/vistas-rejilla.js` con la herramienta de JavaScript: el código y las visualizaciones de cada reel
    y su mediana.
@@ -124,7 +126,11 @@ pruebas, una al día.
   comprobador avisa. Dura parecido (±25 %) y no lleva `puente`, `conclusion`, `iman` ni `cta`: el cierre es uno para
   los dos cuerpos y se graba una vez, así que tiene que contestar a los tres ganchos.
 - Si el tema no da para dos formas (un `regalo` de 20 s, una historia contada en su orden), sin `cuerpo2`: las
-  pruebas cambian solo el gancho. Díselo.
+  pruebas combinan los tres ganchos con recortes de ese cuerpo (uno rápido y uno exprés, por frases enteras) o, en
+  una lista, con los puntos en otro orden (/pruebas). Díselo. Para que se pueda recortar, cada frase se entiende
+  sola: que ninguna diga «como te he dicho» ni dependa de una de relleno.
+- En una `lista` las pruebas solo pueden cambiar el orden de los puntos si la voz no los numera: con «El número
+  uno es…» (como en el molde) se recorta dentro de cada punto. Si no tiene `cuerpo2`, pregúntale cuál prefiere.
 - **Cómo se graba: tres clips.** El 1, los tres ganchos seguidos (cada uno con su frase 2); el 2, el cuerpo 1 y el
   cierre; el 3, el cuerpo 2. Una pausa entre pieza y pieza.
 - Una **Copia** se queda con su único gancho y sin `cuerpo2`: es su reel, frase a frase.

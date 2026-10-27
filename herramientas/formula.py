@@ -4,7 +4,8 @@ abajo), «clip» (el clip de otro arriba y tú debajo escuchando; luego tú a pa
 tu voz encima y una palabra cada vez). Todos se renderizan con HyperFrames.
 
   formula preparar NOMBRE   junta los clips, quita silencios y transcribe     → base.mp4, frases.txt
-                            con --piezas, tres ganchos y dos cuerpos: hasta seis vídeos (piezas.py)
+                            con --piezas, tres ganchos y dos cuerpos: hasta seis vídeos (piezas.py); con un
+                            cuerpo, --cuerpos hace otros dos de sus frases (recortado o en otro orden)
   formula vlog NOMBRE --clips CARPETA | --montar | --voz FICHERO   estilo vlog (vlog.py)
   formula clip NOMBRE URL   estilo clip: el vídeo de otro, transcrito; con --trozos, cortado → clip.mp4
   formula armar NOMBRE      guion.html + subtítulos                            → index.html (y lo valida)
@@ -1075,6 +1076,19 @@ def con_gancho(guion, texto):
     return guion + f'\n<div class="gancho" data-a="0" data-b="2.6">{texto}</div>\n'
 
 
+def pantallas_en(dir_, pedidas):
+    """«120-135,200-210» (números de palabra de piezas.txt o frases.txt) → los segundos de esta combinación en que se
+    dicen, con 0,3 s de margen: ahí la cámara graba algo con letras y la copia en espejo no lo voltea."""
+    palabras = json.loads((dir_ / "palabras.json").read_text(encoding="utf-8"))
+    tramos = []
+    for par in filter(None, (pedidas or "").split(",")):
+        a, _, b = par.strip().partition("-")
+        suyas = [p for p in palabras if int(a) <= p["n"] <= int(b or a)]
+        if suyas:   # un tramo que esta combinación no dice (un cuerpo recortado) no está
+            tramos.append((max(0.0, suyas[0]["a"] - 0.3), suyas[-1]["b"] + 0.3))
+    return tramos
+
+
 def pruebas(args):
     """Las copias de prueba de un reel ya terminado y aprobado (ver .claude/skills/pruebas/SKILL.md)."""
     dir_ = carpeta(args.nombre)
@@ -1131,7 +1145,10 @@ def pruebas(args):
             if (enlace := carpeta(copia) / f).exists():
                 fuente = enlace.resolve()
                 enlace.unlink()
-                subprocess.run([FFMPEG, "-v", "error", "-y", "-i", str(fuente), "-vf", "hflip", "-c:v", "libx264",
+                # Lo que la cámara graba con letras (tu pantalla, un cartel) no se da la vuelta: saldría del revés
+                tramos = pantallas_en(origen, args.pantallas) if f == "base.mp4" else []
+                voltea = "hflip" + (f"=enable='not({'+'.join(f'between(t,{a:.2f},{b:.2f})' for a, b in tramos)})'" if tramos else "")
+                subprocess.run([FFMPEG, "-v", "error", "-y", "-i", str(fuente), "-vf", voltea, "-c:v", "libx264",
                                 "-preset", "veryfast", "-crf", "16", "-g", "30", "-keyint_min", "30", "-pix_fmt", "yuv420p",
                                 "-c:a", "copy", str(enlace)], check=True)
         sub_css = f"#root .costura:not(.clave) {{ {subs_[sub_]} }}" if partida_ else f"#root .sub {{ {subs_[sub_]} margin-top:{baja}px; }}"
@@ -1216,6 +1233,8 @@ def main():
     p.add_argument("--tono", default="cálido", choices=list(corte.TONOS))
     p.add_argument("--piezas", help='grabado en piezas (piezas.py): "A=0,B=31,C=58,1=90,cierre=301,2=340", '
                    "la palabra de crudo.txt en que empieza cada una")
+    p.add_argument("--cuerpos", help='con un solo cuerpo grabado, otros hechos de sus frases (piezas.py): '
+                   '"2=47-155,163-560;3=47-100,200-560", los tramos que dice cada uno y en su orden (números de piezas.txt)')
     p.set_defaults(f=preparar)
     p = sub.add_parser("vlog")
     p.add_argument("nombre")
@@ -1282,6 +1301,8 @@ def main():
     p.add_argument("--n", type=int, default=5, help="cuántas copias (5, una al día: 3 ganchos × 2 cuerpos, menos el normal)")
     p.add_argument("--desde", type=int, default=0, help="la primera combinación: para seguir una tanda cortada")
     p.add_argument("--dia", help="el día de la primera, AAAA-MM-DD (por defecto, mañana); las demás, un día cada una")
+    p.add_argument("--pantallas", help='palabras durante las que la cámara graba letras (tu pantalla, un cartel): '
+                   '"120-135,200-210". En las copias en espejo eso no se voltea')
     p.set_defaults(f=pruebas)
     for nombre, f in (("armar", armar), ("render", render), ("foto", foto), ("portada", portada)):
         p = sub.add_parser(nombre)
