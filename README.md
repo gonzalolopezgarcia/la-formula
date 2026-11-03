@@ -19,7 +19,7 @@ corrección que haces se apunta ahí, así que cada vídeo sale más tuyo que el
 ## Lo que necesitas
 
 - [Claude Code](https://claude.com/claude-code)
-- Un Mac (recomendado) o Linux, con ~3 GB libres
+- Un Mac (recomendado) o Linux, con ~3 GB libres. En Windows, dentro de [WSL](https://learn.microsoft.com/es-es/windows/wsl/install) (el Linux de Windows)
 - [Node.js](https://nodejs.org) 20 o más y Python 3.12 (o [uv](https://docs.astral.sh/uv/), que se lo baja solo)
 - Para subir: Chrome con la extensión **Claude in Chrome** y sesión en Instagram, Meta Business Suite y TikTok
 
