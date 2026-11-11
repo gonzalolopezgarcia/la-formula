@@ -50,6 +50,20 @@ posible: velocidad (tampoco se repite), color, estilo del gancho, espejo.
 - 🚨 **Si aun así las quiere hacer**: enséñale el aviso entero y pregúntale una vez: «Estas pruebas se parecen
   demasiado y pueden quedarse en 0 o costarte alcance. ¿Las hago así igualmente?». Solo con un sí claro a ese aviso,
   `--aun-asi`. Nunca por tu cuenta, ni aunque antes te dijera «hazlo todo».
+- 🚨 **Encima: zoom y grano, cada prueba el suyo, con control de calidad** (`herramientas/encuadre_trials.py`):
+  - **Qué**: solo tu cámara (titulares, subtítulos y capturas, en su sitio), con un zoom del 3 al 9 % anclado en tu
+    cara (`cara-y`) y la imagen corrida hasta 24 px; y un grano que no se ve (nivel 2) al final.
+  - **A quién cuál**: cada prueba un zoom y un desplazamiento que no lleva otra, y las que más se parecen (mismo gancho,
+    mismo cuerpo, mismo espejo, el reel incluido, que va sin zoom) los más distintos. En el mismo fotograma del cuerpo,
+    parejas que se diferenciaban un 0-4 % en una huella de la imagen pasan a un 12-35 %; el espejo solo, ~50 %; el
+    color y el grano, ~1 %.
+  - **El control, antes de cada prueba**: la nitidez de tu cara a un cuarto de tamaño, la mediana ≥ 88 % y el peor
+    fotograma ≥ 80 % (con 9 % de zoom salía 90-96 %; con 20 % sobre un plano ya acercado, ~80 %: se rechaza); ninguna
+    letra cortada ni a menos de 12 px del borde (también en los ratos de `--pantallas`); el grano, ≥ 40 dB frente a la
+    imagen sin él y el fichero no más de un 25 % más pesado. Lo que no pasa baja (el zoom un escalón, hasta sin zoom;
+    el grano un nivel) y la línea de esa prueba dice por qué.
+  - Lo que lleva cada prueba hecha queda en `medidas.json` («encuadres»): otra tanda no lo repite. `--sin-zoom` y
+    `--sin-grano` (quedan apuntados) si tu cámara graba algo pegado al borde que no se puede cortar.
 
 ## Los trucos: que cada copia sea otro vídeo de verdad
 

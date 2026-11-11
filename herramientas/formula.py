@@ -30,6 +30,7 @@ import musica  # noqa: E402
 import vlog as dia  # noqa: E402
 import piezas  # noqa: E402
 import distintas  # noqa: E402
+import encuadre_trials  # noqa: E402
 from config import AQUI, KIT, HF_DIR, TRABAJO, ENTRADA, SALIDA, FFMPEG, FFPROBE  # noqa: E402
 
 HF = HF_DIR / "node_modules" / ".bin" / "hyperframes"
@@ -1146,6 +1147,9 @@ def pruebas(args):
     # Grabado en piezas (piezas.py): cada copia es otra combinación de gancho y cuerpo, con el titular de su gancho
     if (dir_ / "guion-piezas.html").exists():
         piezas.escribir_guiones(dir_)
+    for clave, valor in (("zoom", args.sin_zoom), ("grano", args.sin_grano)):
+        if valor:   # se queda apuntado para las siguientes tandas
+            apuntar(dir_, **{clave: False})
     medidas = json.loads((dir_ / "medidas.json").read_text())
     combos = medidas.get("combos", ["A1"])
     orden = piezas.orden_pruebas(combos, args.desde + args.n)
@@ -1174,6 +1178,16 @@ def pruebas(args):
     destino = SALIDA / "pruebas"
     destino.mkdir(exist_ok=True)
     hechas = []
+    # Cada copia, su zoom y su encuadre (solo tu cámara: el texto y los gráficos, en su sitio), más distintos entre las que
+    # más se parecen (mismo gancho, mismo cuerpo, mismo espejo), el reel incluido; con control de calidad: la nitidez de
+    # tu cara y ninguna letra cortada (encuadre_trials.py). Las copias ya hechas no se tocan
+    total = args.desde + args.n
+    hechos = {int(k): tuple(v[:2]) for k, v in medidas.get("encuadres", {}).items()}
+    encuadres = (encuadre_trials.repartir(
+        [{"gancho": orden[k][:1], "cuerpo": orden[k][1:], "espejo": k % 2 == 1} for k in range(total)],
+        {"gancho": combos[0][:1], "cuerpo": combos[0][1:], "espejo": False}, {k: hechos.get(k, (1.0, 0)) for k in range(args.desde)})
+        if medidas.get("zoom", True) else [(1.0, 0)] * total)
+    cara_y = float(leer_ajustes(guion)["cara-y"])
     for i in range(args.desde, args.desde + args.n):
         # +1: la combinación 0 sería la del original (la primera copia solo cambiaría el color)
         sub_, gancho = sub_de(i, subs_), list(ganchos_)[(i + 1) % 4]
@@ -1193,16 +1207,32 @@ def pruebas(args):
             else:
                 musica.recortar(carpeta(copia), medidas["musica"])
         espejo = i % 2 == 1   # las impares, con tu cámara en espejo: otro vídeo más para Instagram
-        for f in ("base.mp4", "reaccion.mp4") if espejo else ():   # solo tu cámara: el clip de otro, los gráficos y el texto, al derecho
-            if (enlace := carpeta(copia) / f).exists():
+        # Lo que la cámara graba con letras (tu pantalla, un cartel) no se da la vuelta: saldría del revés
+        tramos = pantallas_en(origen, args.pantallas)
+        # El zoom que le toca, si pasa el control; si no, un escalón menos, hasta sin zoom. Se mira también en los ratos
+        # en que la cámara graba letras: el zoom nunca las corta
+        zoom, mueve = encuadres[i]
+        nitidez, bajada = 1.0, ""
+        camara = (carpeta(copia) / "base.mp4").resolve()
+        ancho, alto = encuadre_trials.tamano(FFMPEG, camara)
+        if zoom > 1.0:
+            tiempos = sorted({*encuadre_trials.tiempos_de(FFMPEG, camara), *((a + b) / 2 for a, b in tramos)})
+            zoom, mueve, nitidez, bajada = encuadre_trials.elegir_zoom(FFMPEG, camara, zoom, mueve, ancho, alto, cara_y,
+                                                                       tiempos, con_letras=True)
+        acercar = encuadre_trials.filtro(zoom, mueve, ancho, alto, cara_y)
+        for f in ("base.mp4", "reaccion.mp4"):   # solo tu cámara: el clip de otro, los gráficos y el texto, al derecho
+            voltea = ("hflip" + (f"=enable='not({'+'.join(f'between(t,{a:.2f},{b:.2f})' for a, b in tramos)})'"
+                                 if tramos and f == "base.mp4" else "")) if espejo else ""
+            vf = encuadre_trials.unir(voltea, acercar if f == "base.mp4" else "")
+            if vf and (enlace := carpeta(copia) / f).exists():
                 fuente = enlace.resolve()
                 enlace.unlink()
-                # Lo que la cámara graba con letras (tu pantalla, un cartel) no se da la vuelta: saldría del revés
-                tramos = pantallas_en(origen, args.pantallas) if f == "base.mp4" else []
-                voltea = "hflip" + (f"=enable='not({'+'.join(f'between(t,{a:.2f},{b:.2f})' for a, b in tramos)})'" if tramos else "")
-                subprocess.run([FFMPEG, "-v", "error", "-y", "-i", str(fuente), "-vf", voltea, "-c:v", "libx264",
+                subprocess.run([FFMPEG, "-v", "error", "-y", "-i", str(fuente), "-vf", vf, "-c:v", "libx264",
                                 "-preset", "veryfast", "-crf", "16", "-g", "30", "-keyint_min", "30", "-pix_fmt", "yuv420p",
                                 "-c:a", "copy", str(enlace)], check=True)
+        lado = f"cara {abs(mueve)} px a la {'izquierda' if mueve > 0 else 'derecha'}" if mueve else "cara centrada"
+        encuadre = (f", zoom {(zoom - 1) * 100:.1f} % ({lado}, nitidez {nitidez:.0%})" if zoom > 1.0 else ", sin zoom") + (
+            f" [{bajada}]" if bajada else "")
         sub_css = f"#root .costura:not(.clave) {{ {subs_[sub_]} }}" if partida_ else f"#root .sub {{ {subs_[sub_]} margin-top:{baja}px; }}"
         retoque = (f"<style>\n{sub_css}\n#root .gancho {{ {ganchos_[gancho]} margin-top:{0 if estilo == 'clip' else baja}px; }}"
                    "\n</style>\n")
@@ -1214,8 +1244,13 @@ def pruebas(args):
                        env=ENTORNO, check=True, capture_output=True)
         largo = duracion_de(crudo)
         final = destino / f"{args.nombre}-prueba-{i}.mp4"
+        # Grano invisible con su semilla (≥ 40 dB y sin engordar el fichero): no cambia la huella, solo los píxeles
+        semilla = 1000 + i * 37
+        grano, _ = (encuadre_trials.elegir_grano(FFMPEG, crudo, semilla, vf=COLORES[color])
+                    if medidas.get("grano", True) else (0, None))
         # Fichero nuevo y sin los datos del original; 10 Mb/s como para_instagram
-        subprocess.run([FFMPEG, "-v", "error", "-y", "-i", str(crudo), "-vf", f"setpts=PTS/{vel},{COLORES[color]}",
+        subprocess.run([FFMPEG, "-v", "error", "-y", "-i", str(crudo), "-vf",
+                        encuadre_trials.unir(f"setpts=PTS/{vel}", COLORES[color], encuadre_trials.filtro_grano(grano, semilla)),
                         "-af", f"atempo={vel}", "-c:v", "libx264", "-preset", "medium", "-b:v", "10M", "-maxrate", "12M",
                         "-bufsize", "20M", "-pix_fmt", "yuv420p", "-r", "30", "-c:a", "aac", "-b:a", "192k", "-ar", "48000",
                         "-map_metadata", "-1", "-movflags", "+faststart", str(final)], check=True)
@@ -1227,9 +1262,12 @@ def pruebas(args):
             sys.exit(f"{final.name} dura {duracion_de(final):.1f} s y a {vel}× tendría que durar {largo / vel:.1f}")
         shutil.rmtree(carpeta(copia))
         hechas.append(final)
+        # Lo que lleva cada copia hecha, para que otra tanda no repita su encuadre
+        apuntar(dir_, encuadres={**json.loads((dir_ / "medidas.json").read_text()).get("encuadres", {}),
+                                 str(i): [zoom, mueve, grano]})
         print(f"  {final.name}{cual}: «{titulares[i] or 'su gancho'}», {vel}×, {color}, subtítulos «{sub_}», gancho «{gancho}», "
               f"canción «{cancion['titulo'] if cancion else 'la del reel'}», "
-              f"{baja} px más abajo{', en espejo' if espejo else ''}", flush=True)
+              f"{baja} px más abajo{', en espejo' if espejo else ''}{encuadre}, grano {grano}", flush=True)
     # La hoja para mirarlas: el gancho (1 s) y un subtítulo (la mitad) de cada una, en dos filas
     hoja = destino / f"{args.nombre}-pruebas.jpg"
     entradas = []
@@ -1358,6 +1396,9 @@ def main():
                    '"120-135,200-210". En las copias en espejo eso no se voltea')
     p.add_argument("--aun-asi", action="store_true", help="hacerlas aunque el aviso diga que se parecen demasiado: solo "
                    "con el sí de quien ha leído el aviso")
+    p.add_argument("--sin-zoom", action="store_true", help="ninguna copia con zoom ni encuadre corrido (queda apuntado): "
+                   "para una cámara con algo pegado al borde que no se puede cortar")
+    p.add_argument("--sin-grano", action="store_true", help="ninguna copia con grano (queda apuntado)")
     p.set_defaults(f=pruebas)
     for nombre, f in (("armar", armar), ("render", render), ("foto", foto), ("portada", portada)):
         p = sub.add_parser(nombre)
