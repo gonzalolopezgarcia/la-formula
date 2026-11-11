@@ -1009,6 +1009,8 @@ SUBS_TRIAL = {
     "amarillo": "color:#FFE14D;",
     "caja blanca": "background:#fff; color:#111; " + CAJA_SUB,
     "mayúsculas": "text-transform:uppercase; font-weight:800; font-size:40px; letter-spacing:.01em;",
+    # 11-nov-2026: un estilo por vídeo entre el reel («contorno», el suyo) y sus 5 pruebas (sub_de)
+    "caja amarilla": "background:#FFE14D; color:#111; " + CAJA_SUB,
 }
 GANCHOS_TRIAL = {
     "letra": "",
@@ -1025,6 +1027,7 @@ SUBS_TRIAL_REMOTION = {
     "mayúsculas": "text-transform:uppercase; font-weight:800; letter-spacing:.01em;",
     "caja tinta": "background:var(--tinta); color:#fff; " + CAJA_COSTURA,
     "grande": "font-size:50px;",
+    "caja amarilla": "background:#FFE14D; color:#111; " + CAJA_COSTURA,
 }
 GANCHOS_TRIAL_REMOTION = {
     "letra": "",
@@ -1090,35 +1093,44 @@ def pantallas_en(dir_, pedidas):
     return tramos
 
 
-def revisar_distintas(dir_, args, combos, orden, titulares, guion, medidas, canciones):
-    """Antes de hacer nada: ¿cada copia es otro vídeo? (distintas.py: 3 cambios grandes frente al reel y 2 entre
-    copias). Si no llega, para con el aviso. --aun-asi (solo con el sí de quien lo ha leído) sigue y queda apuntado en
-    medidas.json, para que una tanda nocturna no vuelva a parar con el mismo aviso."""
+def sub_de(i, subs_):
+    """El estilo de subtítulos de la prueba i: uno distinto en cada una y nunca el del reel (el de CSS vacío)."""
+    lista = [k for k, css in subs_.items() if css]
+    return lista[i % len(lista)]
+
+
+def revisar_distintas(dir_, args, combos, orden, titulares, guion, medidas, canciones, subs_):
+    """Antes de hacer nada: entre el reel y sus pruebas, ¿ninguno repite canción, estilo de subtítulos, contenido
+    (gancho + cuerpo) ni titular? (distintas.py: el mínimo para los 6). La velocidad tampoco se repite. Si no, para
+    con el aviso. --aun-asi (solo con el sí de quien lo ha leído) sigue y queda apuntado en medidas.json."""
     visto = GANCHO_A_LA_VISTA.search(guion)
     titulo = re.sub(r"<[^>]+>", " ", visto.group(0)) if visto else None
     con_titular = admite_titular(guion)
-    original = {"gancho": combos[0][0], "cuerpo": combos[0][1:], "titular": titulo,
-                "cancion": (medidas.get("musica") or {}).get("cancion")}
-    copias = [{"gancho": orden[i][0], "cuerpo": orden[i][1:],
-               # sin ganchos-prueba.txt, cada copia lleva el titular de su gancho
+    original = {"cancion": (medidas.get("musica") or {}).get("cancion"),
+                "subtitulos": next((k for k, css in subs_.items() if not css), "el del reel"),
+                "contenido": combos[0], "titular": titulo, "velocidad": 1.0}
+    copias = [{"cancion": canciones[i]["id"] if canciones[i] else None, "subtitulos": sub_de(i, subs_),
+               "contenido": orden[i],
+               # sin ganchos-prueba.txt, cada prueba lleva el titular de su gancho
                "titular": titulares[i] or (f"titular del gancho {orden[i][0]}"
                                            if con_titular and orden[i][0] != combos[0][0] else None),
-               "cancion": canciones[i]["id"] if canciones[i] else None} for i in range(args.desde, args.desde + args.n)]
+               "velocidad": VELOCIDADES[i % len(VELOCIDADES)]} for i in range(args.desde, args.desde + args.n)]
     avisos = distintas.revisar(copias, original)
     vistos = set(medidas.get("aun_asi", []))
     if not avisos or set(avisos) <= vistos:
         return
     if not args.aun_asi:
         sys.exit(distintas.aviso(avisos, arreglos=(
-            "Otro gancho: grabar 2 o 3 comienzos más (/guion los escribe) y preparar en piezas.",
-            "Otro corte del cuerpo: --cuerpos en `preparar` (rápido ~80 %, exprés ~60 %, o la lista en otro orden).",
-            "Otro titular: ganchos-prueba.txt, una línea distinta por copia (nunca el titular del reel).",
-            "Otra canción: el reel necesita su música (formula musica) y más canciones en marca/musica.json\n"
-            "     (formula musica --anadir): cada copia lleva una distinta.",
-            "Menos copias (--n 3): mejor 3 distintas que 5 parecidas.")))
+            "Canción: el reel necesita su música (formula musica) y al menos 5 canciones más en marca/musica.json\n"
+            "     (formula musica --anadir): cada prueba lleva una distinta.",
+            "Subtítulos: ya va uno distinto en cada prueba; si se repite, hay más pruebas que estilos (--n 5 como mucho).",
+            "Contenido: cada prueba otra combinación de gancho y cuerpo (grabar 3 ganchos) o otro recorte\n"
+            "     (--cuerpos en `preparar`: rápido ~80 %, exprés ~60 %, o la lista en otro orden).",
+            "Titular: ganchos-prueba.txt, una línea distinta por prueba (nunca el titular del reel).",
+            "Menos pruebas (--n 3): mejor 3 que cumplan que 5 que se repitan.")))
     medidas["aun_asi"] = sorted(vistos | set(avisos))
     (dir_ / "medidas.json").write_text(json.dumps(medidas))
-    print("  ⚠ copias poco distintas, hechas igual con su sí (--aun-asi):\n    " + "\n    ".join(avisos), flush=True)
+    print("  ⚠ pruebas que repiten algo, hechas igual con su sí (--aun-asi):\n    " + "\n    ".join(avisos), flush=True)
 
 
 def pruebas(args):
@@ -1154,17 +1166,17 @@ def pruebas(args):
     # Cada copia, otra canción (nunca la del reel); sin canciones de sobra, la misma y distintas.py lo cuenta
     otras = musica.otras(medidas["musica"]) if medidas.get("musica") else []
     canciones = [otras[i % len(otras)] if otras else None for i in range(args.desde + args.n)]
-    revisar_distintas(dir_, args, combos, orden, titulares, guion, medidas, canciones)
     estilo = leer_ajustes(guion)["estilo"]
     partida_ = estilo == "partida"
     subs_, ganchos_ = {"partida": (SUBS_TRIAL_REMOTION, GANCHOS_TRIAL_REMOTION),
                        "clip": (SUBS_TRIAL, GANCHOS_TRIAL_CLIP)}.get(estilo, (SUBS_TRIAL, GANCHOS_TRIAL))
+    revisar_distintas(dir_, args, combos, orden, titulares, guion, medidas, canciones, subs_)
     destino = SALIDA / "pruebas"
     destino.mkdir(exist_ok=True)
     hechas = []
     for i in range(args.desde, args.desde + args.n):
         # +1: la combinación 0 sería la del original (la primera copia solo cambiaría el color)
-        sub_, gancho = list(subs_)[(i + 1) % 5], list(ganchos_)[(i + 1) % 4]
+        sub_, gancho = sub_de(i, subs_), list(ganchos_)[(i + 1) % 4]
         color, vel, baja = list(COLORES)[i % 7], VELOCIDADES[i % 8], BAJA_TRIAL[i % 3]
         copia, combo = f"{args.nombre}/_prueba-{i}", orden[i]
         origen, cual = piezas.carpeta_de(dir_, combo, combos), f" ({combo})" if len(combos) > 1 else ""

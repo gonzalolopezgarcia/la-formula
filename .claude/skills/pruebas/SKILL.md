@@ -32,23 +32,24 @@ Una o dos líneas por paso. Por ejemplo:
 - **Se renderizan cuando diga**: ya, o «esta noche» si el ordenador está ocupado (por defecto, a las 23:00). Cada copia
   rehace el vídeo entero: unos 3 minutos por cada 45 s con el ordenador libre.
 
-## 🚨 La regla: 3 cambios grandes por copia
+## 🚨 La regla de mínimos: entre los 6 vídeos, nada se repite
 
-Instagram reconoce un vídeo por lo que se ve y se oye: **el color, la velocidad, el espejo, el estilo de subtítulos o
-un fichero nuevo no lo esconden**. Ayudan, pero solo encima. Lo que lo hace otro vídeo, los **cambios grandes**:
-**otro gancho dicho**, **otro corte del cuerpo**, **otro titular** (otra frase, no la misma con una palabra cambiada)
-y **otra canción**.
+El reel y sus 5 pruebas son 6 vídeos. **Entre ellos no puede haber dos con la misma canción, el mismo estilo de
+subtítulos, el mismo contenido (gancho + cuerpo o recorte) ni el mismo titular arriba.** Y encima, lo más distinto
+posible: velocidad (tampoco se repite), color, estilo del gancho, espejo.
 
-- **Cada copia, al menos 3 cambios grandes frente al reel normal y 2 frente a cada otra copia.**
-- `formula pruebas` lo comprueba antes de hacer nada (`herramientas/distintas.py`) y **para con un aviso** si alguna
-  no llega. Lo que puedes sumar sin grabar nada: otro corte (`--cuerpos` en `preparar`), otro titular
-  (`ganchos-prueba.txt`, nunca el del reel) y otra canción (cada copia coge otra de `marca/musica.json`, nunca la del
-  reel: hacen falta tantas canciones como copias, `formula musica --anadir`). Si aun así no llega, **menos copias**
-  (`--n 3`): mejor 3 distintas que 5 parecidas.
-- 🚨 **Si aun así las quiere hacer**: enséñale el aviso entero, con lo que cambia y lo que le falta a cada copia, y
-  pregúntale una vez: «Estas copias se parecen demasiado y pueden quedarse en 0 o costarte alcance. ¿Las hago así
-  igualmente?». Solo con un sí claro a ese aviso, `--aun-asi` (queda apuntado para no volver a parar con el mismo).
-  Nunca por tu cuenta, ni aunque antes te dijera «hazlo todo».
+- **Canción**: cada prueba coge otra de `marca/musica.json`, nunca la del reel: hacen falta 5 más
+  (`formula musica --anadir`).
+- **Subtítulos**: cada prueba lleva otro estilo (caja negra, amarillo, caja blanca, mayúsculas, caja amarilla); el
+  del reel no vuelve.
+- **Contenido**: cada prueba otra combinación de gancho y cuerpo (3 ganchos × 2 cuerpos = B1, C1, A2, B2, C2) o de
+  gancho y recorte (`--cuerpos` en `preparar`). El reel normal (A1) nunca vuelve.
+- **Titular**: `ganchos-prueba.txt`, una línea distinta por prueba, nunca la del reel.
+- `formula pruebas` lo comprueba antes de hacer nada (`herramientas/distintas.py`) y **para con un aviso** si algo
+  se repite. Si no llega para 5, **menos pruebas** (`--n 3`): mejor 3 que cumplan que 5 que se repitan.
+- 🚨 **Si aun así las quiere hacer**: enséñale el aviso entero y pregúntale una vez: «Estas pruebas se parecen
+  demasiado y pueden quedarse en 0 o costarte alcance. ¿Las hago así igualmente?». Solo con un sí claro a ese aviso,
+  `--aun-asi`. Nunca por tu cuenta, ni aunque antes te dijera «hazlo todo».
 
 ## Los trucos: que cada copia sea otro vídeo de verdad
 
