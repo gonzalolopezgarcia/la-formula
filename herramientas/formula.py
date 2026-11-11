@@ -29,6 +29,7 @@ import sonidos  # noqa: E402
 import musica  # noqa: E402
 import vlog as dia  # noqa: E402
 import piezas  # noqa: E402
+import distintas  # noqa: E402
 from config import AQUI, KIT, HF_DIR, TRABAJO, ENTRADA, SALIDA, FFMPEG, FFPROBE  # noqa: E402
 
 HF = HF_DIR / "node_modules" / ".bin" / "hyperframes"
@@ -1089,6 +1090,37 @@ def pantallas_en(dir_, pedidas):
     return tramos
 
 
+def revisar_distintas(dir_, args, combos, orden, titulares, guion, medidas, canciones):
+    """Antes de hacer nada: ¿cada copia es otro vídeo? (distintas.py: 3 cambios grandes frente al reel y 2 entre
+    copias). Si no llega, para con el aviso. --aun-asi (solo con el sí de quien lo ha leído) sigue y queda apuntado en
+    medidas.json, para que una tanda nocturna no vuelva a parar con el mismo aviso."""
+    visto = GANCHO_A_LA_VISTA.search(guion)
+    titulo = re.sub(r"<[^>]+>", " ", visto.group(0)) if visto else None
+    con_titular = admite_titular(guion)
+    original = {"gancho": combos[0][0], "cuerpo": combos[0][1:], "titular": titulo,
+                "cancion": (medidas.get("musica") or {}).get("cancion")}
+    copias = [{"gancho": orden[i][0], "cuerpo": orden[i][1:],
+               # sin ganchos-prueba.txt, cada copia lleva el titular de su gancho
+               "titular": titulares[i] or (f"titular del gancho {orden[i][0]}"
+                                           if con_titular and orden[i][0] != combos[0][0] else None),
+               "cancion": canciones[i]["id"] if canciones[i] else None} for i in range(args.desde, args.desde + args.n)]
+    avisos = distintas.revisar(copias, original)
+    vistos = set(medidas.get("aun_asi", []))
+    if not avisos or set(avisos) <= vistos:
+        return
+    if not args.aun_asi:
+        sys.exit(distintas.aviso(avisos, arreglos=(
+            "Otro gancho: grabar 2 o 3 comienzos más (/guion los escribe) y preparar en piezas.",
+            "Otro corte del cuerpo: --cuerpos en `preparar` (rápido ~80 %, exprés ~60 %, o la lista en otro orden).",
+            "Otro titular: ganchos-prueba.txt, una línea distinta por copia (nunca el titular del reel).",
+            "Otra canción: el reel necesita su música (formula musica) y más canciones en marca/musica.json\n"
+            "     (formula musica --anadir): cada copia lleva una distinta.",
+            "Menos copias (--n 3): mejor 3 distintas que 5 parecidas.")))
+    medidas["aun_asi"] = sorted(vistos | set(avisos))
+    (dir_ / "medidas.json").write_text(json.dumps(medidas))
+    print("  ⚠ copias poco distintas, hechas igual con su sí (--aun-asi):\n    " + "\n    ".join(avisos), flush=True)
+
+
 def pruebas(args):
     """Las copias de prueba de un reel ya terminado y aprobado (ver .claude/skills/pruebas/SKILL.md)."""
     dir_ = carpeta(args.nombre)
@@ -1119,6 +1151,10 @@ def pruebas(args):
             sys.exit(f"{fichero_ganchos.name} trae {len(titulares)} titulares y hacen falta {args.desde + args.n}")
     else:
         print("  abre con su gráfico arriba: sin titular nuevo, cada copia cambia solo el estilo", flush=True)
+    # Cada copia, otra canción (nunca la del reel); sin canciones de sobra, la misma y distintas.py lo cuenta
+    otras = musica.otras(medidas["musica"]) if medidas.get("musica") else []
+    canciones = [otras[i % len(otras)] if otras else None for i in range(args.desde + args.n)]
+    revisar_distintas(dir_, args, combos, orden, titulares, guion, medidas, canciones)
     estilo = leer_ajustes(guion)["estilo"]
     partida_ = estilo == "partida"
     subs_, ganchos_ = {"partida": (SUBS_TRIAL_REMOTION, GANCHOS_TRIAL_REMOTION),
@@ -1137,9 +1173,13 @@ def pruebas(args):
         for f in dir_.iterdir():   # lo que el guion pueda nombrar (base, capturas, música), enlazado y no copiado
             if f.name not in ("guion.html", "guion-piezas.html", "index.html", "sonidos.wav", "kit", "render.mp4") and not f.name.startswith("_"):
                 (carpeta(copia) / f.name).symlink_to(origen / f.name if f.name in ("base.mp4", "palabras.json", "medidas.json") else f)
-        if origen != dir_ and medidas.get("musica"):   # la canción, cortada al largo de esta combinación
+        cancion = canciones[i]
+        if medidas.get("musica") and (cancion or origen != dir_):   # otra canción (o la suya), al largo de esta combinación
             (carpeta(copia) / "musica.wav").unlink(missing_ok=True)
-            musica.recortar(carpeta(copia), medidas["musica"])
+            if cancion:
+                musica.ajustar(carpeta(copia), cancion, medidas["musica"]["tipo"], medidas["musica"]["entra"])
+            else:
+                musica.recortar(carpeta(copia), medidas["musica"])
         espejo = i % 2 == 1   # las impares, con tu cámara en espejo: otro vídeo más para Instagram
         for f in ("base.mp4", "reaccion.mp4") if espejo else ():   # solo tu cámara: el clip de otro, los gráficos y el texto, al derecho
             if (enlace := carpeta(copia) / f).exists():
@@ -1176,6 +1216,7 @@ def pruebas(args):
         shutil.rmtree(carpeta(copia))
         hechas.append(final)
         print(f"  {final.name}{cual}: «{titulares[i] or 'su gancho'}», {vel}×, {color}, subtítulos «{sub_}», gancho «{gancho}», "
+              f"canción «{cancion['titulo'] if cancion else 'la del reel'}», "
               f"{baja} px más abajo{', en espejo' if espejo else ''}", flush=True)
     # La hoja para mirarlas: el gancho (1 s) y un subtítulo (la mitad) de cada una, en dos filas
     hoja = destino / f"{args.nombre}-pruebas.jpg"
@@ -1303,6 +1344,8 @@ def main():
     p.add_argument("--dia", help="el día de la primera, AAAA-MM-DD (por defecto, mañana); las demás, un día cada una")
     p.add_argument("--pantallas", help='palabras durante las que la cámara graba letras (tu pantalla, un cartel): '
                    '"120-135,200-210". En las copias en espejo eso no se voltea')
+    p.add_argument("--aun-asi", action="store_true", help="hacerlas aunque el aviso diga que se parecen demasiado: solo "
+                   "con el sí de quien ha leído el aviso")
     p.set_defaults(f=pruebas)
     for nombre, f in (("armar", armar), ("render", render), ("foto", foto), ("portada", portada)):
         p = sub.add_parser(nombre)

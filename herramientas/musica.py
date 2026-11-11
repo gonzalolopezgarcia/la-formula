@@ -138,6 +138,15 @@ def poner(dir_, tipo=None, cancion=None, entra=0.0):
     print(f"{c['titulo']}, {c['artista']} (desde el {desde:g} s) → musica.wav\nEn la línea de ajustes del guion: musica=musica.wav")
 
 
+def otras(eleccion):
+    """Las canciones para las copias de prueba: nunca la del reel, primero las de su tipo. Cada copia lleva otra
+    (11-nov-2026: con la misma canción, las copias se parecen demasiado; ver distintas.py)."""
+    tipo = eleccion.get("tipo")
+    resto = [c for c in catalogo()["canciones"] if c["id"] != eleccion["cancion"]
+             and any(f.suffix.lower() in (".m4a", ".mp3", ".wav", ".aac") for f in CANCIONES.glob(f"{c['id']}.*"))]
+    return sorted(resto, key=lambda c: tipo not in c["tipos"])
+
+
 def recortar(dir_, eleccion):
     """La misma canción que eligió poner, desde el mismo sitio y al mismo volumen, al largo del vídeo de dir_:
     las combinaciones de un reel grabado en piezas (piezas.py) no duran lo mismo que el reel."""

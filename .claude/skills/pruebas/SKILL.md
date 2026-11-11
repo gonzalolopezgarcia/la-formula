@@ -32,6 +32,24 @@ Una o dos líneas por paso. Por ejemplo:
 - **Se renderizan cuando diga**: ya, o «esta noche» si el ordenador está ocupado (por defecto, a las 23:00). Cada copia
   rehace el vídeo entero: unos 3 minutos por cada 45 s con el ordenador libre.
 
+## 🚨 La regla: 3 cambios grandes por copia
+
+Instagram reconoce un vídeo por lo que se ve y se oye: **el color, la velocidad, el espejo, el estilo de subtítulos o
+un fichero nuevo no lo esconden**. Ayudan, pero solo encima. Lo que lo hace otro vídeo, los **cambios grandes**:
+**otro gancho dicho**, **otro corte del cuerpo**, **otro titular** (otra frase, no la misma con una palabra cambiada)
+y **otra canción**.
+
+- **Cada copia, al menos 3 cambios grandes frente al reel normal y 2 frente a cada otra copia.**
+- `formula pruebas` lo comprueba antes de hacer nada (`herramientas/distintas.py`) y **para con un aviso** si alguna
+  no llega. Lo que puedes sumar sin grabar nada: otro corte (`--cuerpos` en `preparar`), otro titular
+  (`ganchos-prueba.txt`, nunca el del reel) y otra canción (cada copia coge otra de `marca/musica.json`, nunca la del
+  reel: hacen falta tantas canciones como copias, `formula musica --anadir`). Si aun así no llega, **menos copias**
+  (`--n 3`): mejor 3 distintas que 5 parecidas.
+- 🚨 **Si aun así las quiere hacer**: enséñale el aviso entero, con lo que cambia y lo que le falta a cada copia, y
+  pregúntale una vez: «Estas copias se parecen demasiado y pueden quedarse en 0 o costarte alcance. ¿Las hago así
+  igualmente?». Solo con un sí claro a ese aviso, `--aun-asi` (queda apuntado para no volver a parar con el mismo).
+  Nunca por tu cuenta, ni aunque antes te dijera «hazlo todo».
+
 ## Los trucos: que cada copia sea otro vídeo de verdad
 
 Cinco copias casi iguales se quedan en 0. Lo que más cambia una copia, de más a menos: **otro gancho dicho**, **otro
@@ -42,7 +60,7 @@ color, subtítulos, espejo). Usa todo lo que dé la grabación:
 |---|---|---|
 | 3 ganchos + 2 cuerpos | **B1, C1, A2, B2, C2**: las seis combinaciones menos el reel normal (A1) | `preparar --piezas` (/edicion) ya las deja hechas |
 | 3 ganchos + 1 cuerpo | **B1, C2, A3, B2, C3**: cada gancho con otro recorte del cuerpo, ninguna pareja repetida | Dos cuerpos más hechos de sus frases (abajo) |
-| 1 gancho + 1 cuerpo | **Otro titular** en cada copia y, mejor, con dos recortes del cuerpo (o, en una lista, otro orden): A2, A3, A1, A2, A3 | `ganchos-prueba.txt` (abajo); los recortes, con `--piezas "A=0,1=<donde empieza el cuerpo>"` y `--cuerpos` |
+| 1 gancho + 1 cuerpo | **Dos recortes del cuerpo** (o, en una lista, otro orden), **otro titular** y **otra canción** en cada copia: A2, A3, A2, A3, A2. El reel normal (A1) nunca vuelve como prueba | `ganchos-prueba.txt` (abajo); los recortes, con `--piezas "A=0,1=<donde empieza el cuerpo>"` y `--cuerpos`; las canciones, en `marca/musica.json`. Dile en una línea que con dos comienzos más grabados (un minuto) las copias son mucho más distintas |
 
 ### 🚨 Un solo cuerpo: los otros dos salen de él
 
@@ -82,8 +100,9 @@ Sin el fichero, cada copia lleva el titular de su gancho.
 
 ## Un titular distinto por copia (sin piezas, o un gancho que vuelve)
 
-Cambiar solo el estilo de la caja no prueba nada; cambiar la primera frase que se lee, sí. **No se graba nada más**:
-solo cambia el titular en pantalla (el `gancho`) sobre el mismo vídeo.
+Cambiar solo el estilo de la caja no prueba nada; cambiar la primera frase que se lee, sí. Pero **el titular solo no
+basta** (es 1 de los 3 cambios grandes): con un solo vídeo, cada copia lleva además otro corte del cuerpo y otra
+canción.
 
 - Escribe `videos/trabajo/<nombre>/ganchos-prueba.txt`: 5 líneas, una por copia (` / ` parte la línea): otros ángulos
   **sacados de lo que dice en el vídeo**: un dato o resultado, curiosidad, una promesa de «cómo». Máximo 2 líneas de
@@ -101,7 +120,8 @@ solo cambia el titular en pantalla (el `gancho`) sobre el mismo vídeo.
 herramientas/formula pruebas <nombre> --hashtags "#tema1 #tema2 #tema3 #tema4 #tema5"   # --dia AAAA-MM-DD: el día de la primera
 ```
 
-- Cada copia cambia, además del gancho (o el titular): la velocidad (1,03× a 1,10×, la voz sin cambiar de tono), el
+- Cada copia cambia, además del gancho (o el titular), **la canción** (otra de `marca/musica.json`, nunca la del reel) y
+  la velocidad (1,03× a 1,10×, la voz sin cambiar de tono), el
   color, el estilo de los subtítulos (contorno, caja negra, amarillo, caja blanca, mayúsculas) y del gancho, y lo baja
   0, 28 o 56 px (nunca más arriba: arriba tapa Instagram). **La 2.ª y la 4.ª van en espejo** (solo tu cámara: los
   gráficos y el texto, al derecho). Fichero nuevo, sin los datos del original.

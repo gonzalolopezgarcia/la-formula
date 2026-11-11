@@ -132,16 +132,19 @@ def combinaciones(etiquetas):
 
 
 def orden_pruebas(combos, n):
-    """La combinación de cada prueba: las que no son el reel normal y, si faltan, otra vuelta entera.
+    """La combinación de cada prueba: las que no son el reel normal y, si faltan, otra vuelta sin él (el reel normal
+    nunca vuelve como prueba: sería el mismo vídeo con otro color, 11-nov-2026).
     Tres ganchos y tres cuerpos (dos de ellos, recortes del 1), en diagonal para que ninguna repita gancho y cuerpo:
-    B1, C2, A3, B2, C3. Tres ganchos y dos cuerpos: B1, C1, A2, B2, C2. Con uno: B1, C1, A1, B1, C1; sin piezas, A1."""
+    B1, C2, A3, B2, C3. Tres ganchos y dos cuerpos: B1, C1, A2, B2, C2. Con uno: B1, C1, B1, C1, B1; un gancho y
+    tres cuerpos: A2, A3, A2, A3, A2; sin piezas, A1 (y distintas.py avisa: solo cambiaría el titular)."""
     ganchos = [g for g in GANCHOS if any(c[0] == g for c in combos)]
     cuerpos = [c for c in CUERPOS if any(x[1:] == c for x in combos)]
     if len(ganchos) == 3 and len(cuerpos) == 3:
         diagonal = [ganchos[(k + 1) % 3] + cuerpos[(k + k // 3) % 3] for k in range(9)]
         diagonal = [c for c in diagonal if c != combos[0]]
         return (diagonal * n)[:n]
-    return (combos[1:] + combos * n)[:n]
+    resto = combos[1:] or combos
+    return (resto * n)[:n]
 
 
 def piezas_de(combo, etiquetas):
